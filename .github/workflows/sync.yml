@@ -7,21 +7,17 @@ on:
 
 jobs:
   sync:
-    runs-on: self-hosted  # ✅ Usará cualquier runner self-hosted registrado
+    runs-on: self-hosted
 
     steps:
-      # ✅ 1. Descargar el código del repo
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # ✅ 2. Verificar Salesforce CLI
       - name: Check Salesforce CLI
         run: |
           sfdx --version
           sf --version
-          sfdx plugins --core
 
-      # ✅ 3. Autenticación con secreto SF_AUTH_URL
       - name: Authenticate Salesforce Org
         shell: cmd
         run: |
@@ -31,32 +27,20 @@ jobs:
         env:
           SF_AUTH_URL: ${{ secrets.SF_AUTH_URL }}
 
-      # ✅ 4. Crear estructura DX si no existe
-      - name: Ensure Salesforce project structure
-        shell: cmd
-        run: |
-          if not exist force-app mkdir force-app
-          if not exist force-app\main mkdir force-app\main
-          if not exist force-app\main\default mkdir force-app\main\default
-          if not exist manifest mkdir manifest
-
-      # ✅ 5. Debug: Mostrar directorio actual y archivos
-      - name: Show working directory
+      - name: Show working directory and files
         shell: cmd
         run: |
           echo Current directory:
           cd
           echo -------------------
-          echo Repo structure:
           dir /s
 
-      # ✅ 6. Recuperar metadata con comando actualizado
       - name: Retrieve metadata from Salesforce
         shell: cmd
+        working-directory: ${{ github.workspace }}
         run: |
           sf project retrieve start --manifest manifest/package.xml --target-org PRE
 
-      # ✅ 7. Commit & push solo si hay cambios
       - name: Commit and push changes
         shell: cmd
         run: |
