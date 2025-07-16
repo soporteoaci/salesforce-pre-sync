@@ -2,7 +2,7 @@ name: Sync Salesforce PRE with GitHub
 
 on:
   schedule:
-    - cron: "0 3 * * *" # Todos los días a las 03:00 UTC (04:00 en España)
+    - cron: "0 3 * * *" # Todos los días a las 03:00 UTC (04:00 España)
   workflow_dispatch:
 
 jobs:
@@ -13,6 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # ✅ Validar instalación de SFDX CLI
+      - name: Check Salesforce CLI
+        run: |
+          sfdx --version
+          sfdx plugins --core
+
+      # ✅ Autenticación segura con SF_AUTH_URL desde secretos
       - name: Authenticate Salesforce Org
         shell: cmd
         run: |
@@ -22,16 +29,16 @@ jobs:
         env:
           SF_AUTH_URL: ${{ secrets.SF_AUTH_URL }}
 
-
+      # ✅ Recuperar metadatos usando el manifest
       - name: Retrieve metadata from Salesforce
         run: |
-          mkdir -p force-app
           sfdx force:source:retrieve -x manifest/package.xml -u PRE
 
+      # ✅ Configurar Git y hacer commit solo si hay cambios
       - name: Commit and push changes
         run: |
           git config --global user.email "bot@example.com"
           git config --global user.name "Salesforce Sync Bot"
           git add .
-          git diff --cached --quiet || git commit -m "Sync from PRE $(date)"
+          git diff --cached --quiet || git commit -m "Sync from PRE %DATE% %TIME%"
           git push
