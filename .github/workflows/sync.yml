@@ -41,172 +41,170 @@ jobs:
       # ✅ 5. Crear manifest si no existe
       - name: Ensure manifest exists
         shell: cmd
-        - name: Ensure manifest exists without LightningEmailTemplate
-  shell: cmd
-  run: |
-    if not exist manifest mkdir manifest
-    if not exist manifest\package.xml (
-      echo ^<?xml version="1.0" encoding="UTF-8"?^> > manifest\package.xml
-      echo ^<Package xmlns="http://soap.sforce.com/2006/04/metadata"^> >> manifest\package.xml
-      echo     ^<!-- Código --^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>ApexClass^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>ApexTrigger^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>ApexPage^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>ApexComponent^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<!-- Lightning --^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>LightningComponentBundle^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>AuraDefinitionBundle^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<!-- Objetos y Configuración --^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>CustomObject^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>CustomField^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>RecordType^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>CompactLayout^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>ListView^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>FieldSet^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>ValidationRule^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>WebLink^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>BusinessProcess^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<!-- Automatización --^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>Flow^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>Workflow^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>WorkflowAlert^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>WorkflowFieldUpdate^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>WorkflowRule^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>WorkflowTask^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>ApprovalProcess^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>AssignmentRules^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>EscalationRules^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<!-- Seguridad --^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>Profile^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>PermissionSet^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>Role^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>SharingRules^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<!-- Correo --^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>EmailTemplate^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<!-- Reportes y Dashboards --^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>Report^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>Dashboard^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>ReportType^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<!-- Configuración avanzada --^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>CustomMetadata^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>CustomApplication^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>StaticResource^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>RemoteSiteSetting^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<types^> >> manifest\package.xml
-      echo         ^<members^>*^</members^> >> manifest\package.xml
-      echo         ^<name^>NamedCredential^</name^> >> manifest\package.xml
-      echo     ^</types^> >> manifest\package.xml
-      echo     ^<version^>59.0^</version^> >> manifest\package.xml
-      echo ^</Package^> >> manifest\package.xml
-      )
+        run: |
+          if not exist manifest mkdir manifest
+          if not exist manifest\package.xml (
+            echo ^<?xml version="1.0" encoding="UTF-8"?^> > manifest\package.xml
+            echo ^<Package xmlns="http://soap.sforce.com/2006/04/metadata"^> >> manifest\package.xml
+            echo     ^<!-- Código --^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>ApexClass^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>ApexTrigger^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>ApexPage^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>ApexComponent^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<!-- Lightning --^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>LightningComponentBundle^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>AuraDefinitionBundle^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<!-- Objetos y Configuración --^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>CustomObject^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>CustomField^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>RecordType^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>CompactLayout^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>ListView^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>FieldSet^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>ValidationRule^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>WebLink^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>BusinessProcess^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<!-- Automatización --^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>Flow^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>Workflow^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>WorkflowAlert^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>WorkflowFieldUpdate^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>WorkflowRule^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>WorkflowTask^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>ApprovalProcess^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>AssignmentRules^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>EscalationRules^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<!-- Seguridad --^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>Profile^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>PermissionSet^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>Role^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>SharingRules^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<!-- Correo --^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>EmailTemplate^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<!-- Reportes y Dashboards --^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>Report^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>Dashboard^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>ReportType^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<!-- Configuración avanzada --^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>CustomMetadata^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>CustomApplication^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>StaticResource^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>RemoteSiteSetting^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<types^> >> manifest\package.xml
+            echo         ^<members^>*^</members^> >> manifest\package.xml
+            echo         ^<name^>NamedCredential^</name^> >> manifest\package.xml
+            echo     ^</types^> >> manifest\package.xml
+            echo     ^<version^>59.0^</version^> >> manifest\package.xml
+            echo ^</Package^> >> manifest\package.xml
+          )
 
       # ✅ 6. Debug: Mostrar contenido
       - name: Show working directory and manifest
