@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Enviado_la_oferta_a_soporte__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Se ha enviado la oferta presentada a Soporte Ofertas o se ha subido a Alejandría</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Check this field if the bid has been sent to Bid Support / it has been uploaded to Alejandría</inlineHelpText>
+    <label>Enviado la oferta a soporte / Alejandría</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>
