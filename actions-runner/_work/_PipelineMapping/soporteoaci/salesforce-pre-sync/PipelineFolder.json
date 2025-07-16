@@ -1,0 +1,12 @@
+﻿{
+  "repositoryName": "soporteoaci/salesforce-pre-sync",
+  "pipelineDirectory": "salesforce-pre-sync",
+  "workspaceDirectory": "salesforce-pre-sync\\salesforce-pre-sync",
+  "repositories": {
+    "soporteoaci/salesforce-pre-sync": {
+      "repositoryPath": "salesforce-pre-sync\\salesforce-pre-sync",
+      "lastRunOn": "07/16/2025 11:53:03 +02:00"
+    }
+  },
+  "lastRunOn": "07/16/2025 12:07:45 +02:00"
+}

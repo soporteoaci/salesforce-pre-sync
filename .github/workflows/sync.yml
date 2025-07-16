@@ -7,14 +7,11 @@ on:
 
 jobs:
   sync:
-    runs-on: [self-hosted, Windows, X64]
+    runs-on: self-hosted
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Install Salesforce CLI
-        run: npm install sfdx-cli --global
 
       - name: Authenticate Salesforce Org
         run: |
@@ -33,3 +30,4 @@ jobs:
           git add .
           git diff --cached --quiet || git commit -m "Sync from PRE $(date)"
           git push
+
