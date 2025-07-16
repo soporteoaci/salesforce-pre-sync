@@ -2,7 +2,7 @@ name: Sync Salesforce PRE with GitHub
 
 on:
   schedule:
-    - cron: "0 10 20 * *" # Todos los días a las 03:00 UTC
+    - cron: "22 9 * * *" # Todos los días a las 03:00 UTC
   workflow_dispatch: # Permite ejecutarlo manualmente
 
 jobs:
