@@ -7,7 +7,7 @@ on:
 
 jobs:
   sync:
-    runs-on: self-hosted  # ✅ Usará cualquier runner self-hosted, no depende de etiquetas
+    runs-on: self-hosted  # ✅ Usará cualquier runner self-hosted registrado
 
     steps:
       # ✅ 1. Descargar el código del repo
@@ -40,12 +40,19 @@ jobs:
           if not exist force-app\main\default mkdir force-app\main\default
           if not exist manifest mkdir manifest
 
-      # ✅ 5. Debug: Listar archivos para confirmar manifest
-      - name: List repo files
-        run: dir /s
+      # ✅ 5. Debug: Mostrar directorio actual y archivos
+      - name: Show working directory
+        shell: cmd
+        run: |
+          echo Current directory:
+          cd
+          echo -------------------
+          echo Repo structure:
+          dir /s
 
       # ✅ 6. Recuperar metadata con comando actualizado
       - name: Retrieve metadata from Salesforce
+        shell: cmd
         run: |
           sf project retrieve start --manifest manifest/package.xml --target-org PRE
 
