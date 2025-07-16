@@ -1,26 +1,27 @@
-name: PRE-SYNC
+name: Sincronización Salesforce PRE con GitHub
 
 on:
   schedule:
-    - cron: "00 11 * * *"  # Todos los días a las 03:00 UTC (04:00 España)
+    - cron: "0 3 * * *" # Todos los días a las 03:00 UTC (04:00 en España)
   workflow_dispatch:
 
 jobs:
   sync:
-    runs-on: [self-hosted, Windows, X64]
+    runs-on: self-hosted  # ✅ Usará cualquier runner self-hosted, no depende de etiquetas
 
     steps:
-      # ✅ 1. Checkout del código
+      # ✅ 1. Descargar el código del repo
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # ✅ 2. Verificar que Salesforce CLI está instalado
+      # ✅ 2. Verificar Salesforce CLI
       - name: Check Salesforce CLI
         run: |
           sfdx --version
+          sf --version
           sfdx plugins --core
 
-      # ✅ 3. Autenticación con SF_AUTH_URL
+      # ✅ 3. Autenticación con secreto SF_AUTH_URL
       - name: Authenticate Salesforce Org
         shell: cmd
         run: |
@@ -30,7 +31,7 @@ jobs:
         env:
           SF_AUTH_URL: ${{ secrets.SF_AUTH_URL }}
 
-      # ✅ 4. Crear estructura del proyecto si no existe
+      # ✅ 4. Crear estructura DX si no existe
       - name: Ensure Salesforce project structure
         shell: cmd
         run: |
@@ -39,12 +40,16 @@ jobs:
           if not exist force-app\main\default mkdir force-app\main\default
           if not exist manifest mkdir manifest
 
-      # ✅ 5. Recuperar metadata usando el manifest
+      # ✅ 5. Debug: Listar archivos para confirmar manifest
+      - name: List repo files
+        run: dir /s
+
+      # ✅ 6. Recuperar metadata con comando actualizado
       - name: Retrieve metadata from Salesforce
         run: |
-          sfdx force:source:retrieve -x manifest/package.xml -u PRE
+          sf project retrieve start --manifest manifest/package.xml --target-org PRE
 
-      # ✅ 6. Configurar Git y hacer commit solo si hay cambios
+      # ✅ 7. Commit & push solo si hay cambios
       - name: Commit and push changes
         shell: cmd
         run: |
