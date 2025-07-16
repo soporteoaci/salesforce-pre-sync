@@ -14,11 +14,14 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Authenticate Salesforce Org
-        shell: pwsh
+        shell: cmd
         run: |
-          Set-Content -Path auth.txt -Value "${{ secrets.SF_AUTH_URL }}"
+          echo %SF_AUTH_URL% > auth.txt
           sfdx auth:sfdxurl:store -f auth.txt -a PRE
-          Remove-Item auth.txt
+          del auth.txt
+        env:
+          SF_AUTH_URL: ${{ secrets.SF_AUTH_URL }}
+
 
       - name: Retrieve metadata from Salesforce
         run: |
