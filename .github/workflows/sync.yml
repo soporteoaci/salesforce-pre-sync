@@ -2,16 +2,19 @@ name: Sync Salesforce PRE with GitHub
 
 on:
   schedule:
-    - cron: "55 10 * * *" # Todos los días a las 03:00 UTC
-  workflow_dispatch: # Permite ejecutarlo manualmente
+    - cron: "0 3 * * *" # Todos los días a las 03:00 UTC (04:00 en España)
+  workflow_dispatch:
 
 jobs:
   sync:
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Install Salesforce CLI
+        run: npm install sfdx-cli --global
 
       - name: Authenticate Salesforce Org
         run: |
@@ -30,4 +33,3 @@ jobs:
           git add .
           git diff --cached --quiet || git commit -m "Sync from PRE $(date)"
           git push
-
