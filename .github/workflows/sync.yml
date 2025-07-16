@@ -1,0 +1,35 @@
+name: Sync Salesforce PRE with GitHub
+
+on:
+  schedule:
+    - cron: "0 10 20 * *" # Todos los días a las 03:00 UTC
+  workflow_dispatch: # Permite ejecutarlo manualmente
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Salesforce CLI
+        run: npm install sfdx-cli --global
+
+      - name: Authenticate Salesforce Org
+        run: |
+          echo "${{ secrets.SF_AUTH_URL }}" > auth.txt
+          sfdx auth:sfdxurl:store -f auth.txt -a PRE
+
+      - name: Retrieve metadata from Salesforce
+        run: |
+          mkdir -p force-app
+          sfdx force:source:retrieve -x manifest/package.xml -u PRE
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.email "bot@example.com"
+          git config --global user.name "Salesforce Sync Bot"
+          git add .
+          git diff --cached --quiet || git commit -m "Sync from PRE $(date)"
+          git push
