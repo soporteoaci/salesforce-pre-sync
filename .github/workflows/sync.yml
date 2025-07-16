@@ -1,4 +1,4 @@
-name: Sync Salesforce PRE with GitHub
+name: PRE-SYNC
 
 on:
   schedule:
