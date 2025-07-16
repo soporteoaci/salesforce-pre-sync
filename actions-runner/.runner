@@ -1,0 +1,11 @@
+﻿{
+  "agentId": 2,
+  "agentName": "PRE-Sync-Runner",
+  "poolId": 1,
+  "poolName": "Default",
+  "serverUrl": "https://pipelinesghubeus10.actions.githubusercontent.com/x7356iyVm9kpWE8yzw7AR8gvmToSsHs9pLcxV0eas7qMGTpW3B/",
+  "gitHubUrl": "https://github.com/soporteoaci/salesforce-pre-sync",
+  "workFolder": "_work",
+  "useV2Flow": true,
+  "serverUrlV2": "https://broker.actions.githubusercontent.com/"
+}
