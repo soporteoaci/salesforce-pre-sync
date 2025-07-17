@@ -17,7 +17,6 @@ jobs:
       # ✅ 2. Comprobar Salesforce CLI
       - name: Check Salesforce CLI
         run: |
-          sfdx --version
           sf --version
 
       # ✅ 3. Autenticación con SF_AUTH_URL
@@ -25,7 +24,7 @@ jobs:
         shell: cmd
         run: |
           echo %SF_AUTH_URL% > auth.txt
-          sfdx auth:sfdxurl:store -f auth.txt -a PRE
+          sf org login sfdx-url --sfdx-url-file auth.txt --alias PRE --set-default
           del auth.txt
         env:
           SF_AUTH_URL: ${{ secrets.SF_AUTH_URL }}
@@ -215,7 +214,7 @@ jobs:
           echo -------------------
           dir /s manifest
 
-      # ✅ 7. Recuperar metadata
+      # ✅ 7. Recuperar metadata con sf
       - name: Retrieve metadata from Salesforce
         shell: cmd
         run: |
