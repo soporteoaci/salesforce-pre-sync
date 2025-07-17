@@ -4,7 +4,7 @@
     <externalId>false</externalId>
     <formula>If (Facturacion__c / impcontrato__c &gt;= 1,1,Facturacion__c / impcontrato__c)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-    <inlineHelpText>Actual Billing / Contracted Amount</inlineHelpText>
+    <inlineHelpText>Facturación Real / Importe Contrato</inlineHelpText>
     <label>Avance en Facturación</label>
     <precision>18</precision>
     <required>false</required>

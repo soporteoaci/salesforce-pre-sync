@@ -3,7 +3,7 @@
     <fullName>AprobadorFinal__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <externalId>false</externalId>
-    <inlineHelpText>Normally the client: Once approved, it goes to the final approver</inlineHelpText>
+    <inlineHelpText>Normalmente el cliente. Una vez aprobado pasa a Firmado.</inlineHelpText>
     <label>Aprobador Final</label>
     <referenceTo>User</referenceTo>
     <relationshipName>EntregablesFirmar</relationshipName>

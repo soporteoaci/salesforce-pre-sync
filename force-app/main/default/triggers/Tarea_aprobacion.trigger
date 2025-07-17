@@ -6,9 +6,7 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert) {
     //Recuperamos el usuario para no ejecutar el trigger
     
     No_ejecutar_triggers__c usuario_no_trigger = [SELECT Correo_usuario__c FROM No_ejecutar_triggers__c LIMIT 1];
-    
-    
-    
+
     List <String> oportunidades = new List <String>();
     List <String> objetivos = new List <String>();
     
@@ -52,7 +50,7 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert) {
     
     String DecisionQATecnico_calculada='';
     String DecisionQAEconomico_calculada='';
-    if(emailAddress != usuario_no_trigger.Correo_usuario__c){
+    //if(emailAddress != usuario_no_trigger.Correo_usuario__c){
         // AFTER UPDATE
         if (Trigger.isAfter && Trigger.isUpdate) {
             //1. Recuperamos las oportunidades en donde haya un cambio en la decisión de la tarea de aprobación
@@ -325,34 +323,51 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert) {
             
         }
         if (Trigger.isAfter && Trigger.isInsert) {
+            System.debug('--- INICIO TRIGGER: AFTER INSERT EN Tarea_aprobacion__c ---');
+            
             Set<Id> oportunidadIds = new Set<Id>();
             List<Tarea_aprobacion__c> tareaList = Trigger.new;
             
+            System.debug('Total de tareas procesadas: ' + tareaList.size());
+            
             for (Tarea_aprobacion__c t : tareaList) {
+                System.debug('Tarea analizada: ' + t.Id + ' | Oportunidad__c: ' + t.Oportunidad__c);
                 if (t.Oportunidad__c != null) {
                     oportunidadIds.add(t.Oportunidad__c);
                 }
             }
             
-            if (oportunidadIds.isEmpty()) return;
+            System.debug('Oportunidades encontradas: ' + oportunidadIds);
+            
+            if (oportunidadIds.isEmpty()) {
+                System.debug('No hay oportunidades relacionadas, FIN TRIGGER.');
+                return;
+            }
             
             // 1. Obtener oportunidades con OwnerId
-                Map<Id, Opportunity> oportunidadesMap = new Map<Id, Opportunity>(
-                    [SELECT Id, OwnerId FROM Opportunity WHERE Id IN :oportunidadIds]
-                );
+            Map<Id, Oportunidad__c> oportunidadesMap = new Map<Id, Oportunidad__c>(
+                [SELECT Id, OwnerId FROM Oportunidad__c WHERE Id IN :oportunidadIds]
+            );
+            System.debug('Oportunidades recuperadas: ' + oportunidadesMap);
             
             // 2. Actualizar tareas con el OwnerId
             List<Tarea_aprobacion__c> tareasParaActualizar = new List<Tarea_aprobacion__c>();
             
             for (Tarea_aprobacion__c t : tareaList) {
                 if (t.Oportunidad__c != null && oportunidadesMap.containsKey(t.Oportunidad__c)) {
-                    t.Propietario_de_la_Oportunidad__c = oportunidadesMap.get(t.Oportunidad__c).OwnerId;
-                    tareasParaActualizar.add(t);
+                    Id ownerId = oportunidadesMap.get(t.Oportunidad__c).OwnerId;
+                    tareasParaActualizar.add(new Tarea_aprobacion__c(
+                        Id = t.Id,
+                        Propietario_de_la_Oportunidad__c = ownerId
+                    ));
                 }
             }
             
+            System.debug('Tareas a actualizar con OwnerId: ' + tareasParaActualizar.size());
+            
             if (!tareasParaActualizar.isEmpty()) {
                 update tareasParaActualizar;
+                System.debug('UPDATE ejecutado sobre tareas.');
             }
             
             // 3. Contar tareas QA y actualizar flag en oportunidad
@@ -365,24 +380,34 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert) {
                 AND Tipo__c IN ('Oferta QA Económico', 'Oferta QA Técnico')
                 GROUP BY Oportunidad__c
             ]) {
+                System.debug('AggregateResult QA: ' + ar);
                 oportunidadTieneQA.put((Id) ar.get('Id'), true);
             }
+            
+            System.debug('Mapa oportunidadTieneQA: ' + oportunidadTieneQA);
             
             List<Oportunidad__c> oportunidadesActualizar = new List<Oportunidad__c>();
             
             for (Id oppId : oportunidadIds) {
                 Boolean tieneQA = oportunidadTieneQA.containsKey(oppId);
+                System.debug('Oportunidad ' + oppId + ' tiene QA? ' + tieneQA);
                 oportunidadesActualizar.add(new Oportunidad__c(
                     Id = oppId,
                     Tiene_Oferta_QA__c = tieneQA
                 ));
             }
             
+            System.debug('Oportunidades a actualizar: ' + oportunidadesActualizar.size());
+            
             if (!oportunidadesActualizar.isEmpty()) {
                 update oportunidadesActualizar;
+                System.debug('UPDATE ejecutado sobre oportunidades.');
             }
+            
+            System.debug('--- FIN TRIGGER AFTER INSERT EN Tarea_aprobacion__c ---');
         }
-    }
+        
+    //}
     
     public String resumenAprobacion(List <Tarea_aprobacion__c> lista_tareas){
         
@@ -612,7 +637,6 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert) {
             }            
             
         }
-        
         
     }    
     public void AprobacionBorradorAcuerdoSocios(List <Tarea_aprobacion__c> tareas_relacionadas_subcontrata, Oportunidad__c op){
