@@ -409,6 +409,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>Elemento_PEP__c</field>
+            <table>Account.Oportunidades__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <displayNameOverride>Subcontrataciones nominadas</displayNameOverride>
             <field>Subcontrataciones__c</field>
             <table>Account.Oportunidades__r</table>
