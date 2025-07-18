@@ -17,12 +17,11 @@ jobs:
           if (-not (Get-Command sf -ErrorAction SilentlyContinue)) {
             Write-Host "Salesforce CLI not found. Installing..."
             npm install --global @salesforce/cli
-            # Agregar ruta de NPM global al PATH
-            $env:PATH += ";$env:APPDATA\npm"
+            # Agregar ruta global de NPM al PATH para los siguientes steps
+            echo "$env:APPDATA\npm" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           } else {
             Write-Host "Salesforce CLI already installed."
           }
-          Write-Host "PATH actual: $env:PATH"
           sf --version
 
 
