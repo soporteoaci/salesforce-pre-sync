@@ -232,7 +232,21 @@ jobs:
           echo Workspace: %GITHUB_WORKSPACE%
           sf project retrieve start --manifest "%GITHUB_WORKSPACE%\manifest\package.xml" --target-org PRE
 
-      # ✅ 8. Commit y push si hay cambios
+      # ✅ 8. Check y install git    
+      - name: Check or Install Git
+        shell: powershell
+        run: |
+          if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+            Write-Host "Git not found. Installing..."
+            choco install git -y
+            # Agregar ruta binaria de Git al PATH para siguientes steps
+            echo "C:\Program Files\Git\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          } else {
+            Write-Host "Git is already installed."
+          }
+          git --version
+
+      # ✅ 9. Commit y push si hay cambios
       - name: Commit and push changes
         shell: cmd
         run: |
