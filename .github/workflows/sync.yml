@@ -12,16 +12,15 @@ jobs:
     steps:
       # ✅ 1. Checkout del repositorio
       - name: Check or Install Salesforce CLI
-        shell: bash
+        shell: powershell
         run: |
-          if ! command -v sf &> /dev/null; then
-            echo "Salesforce CLI not found. Installing..."
+          if (-not (Get-Command sf -ErrorAction SilentlyContinue)) {
+            Write-Host "Salesforce CLI not found. Installing..."
             npm install --global @salesforce/cli
-          else
-            echo "Salesforce CLI already installed."
-          fi
+          } else {
+            Write-Host "Salesforce CLI already installed."
+          }
           sf --version
-
 
       # ✅ 3. Autenticación con SF_AUTH_URL
       - name: Authenticate Salesforce Org
