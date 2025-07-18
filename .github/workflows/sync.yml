@@ -18,10 +18,10 @@ jobs:
             Write-Host "Salesforce CLI not found. Installing..."
             npm install --global @salesforce/cli
           }
-          # Forzar añadir la ruta global de npm
-          $env:PATH += ";$env:APPDATA\npm"
-          Write-Host "PATH actualizado: $env:PATH"
+          # Añadir la ruta global de npm al PATH de todos los steps
+          echo "$env:APPDATA\npm" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           sf --version
+
 
       # ✅ 3. Autenticación con SF_AUTH_URL
       - name: Authenticate Salesforce Org
