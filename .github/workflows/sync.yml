@@ -17,10 +17,14 @@ jobs:
           if (-not (Get-Command sf -ErrorAction SilentlyContinue)) {
             Write-Host "Salesforce CLI not found. Installing..."
             npm install --global @salesforce/cli
+            # Agregar ruta de NPM global al PATH
+            $env:PATH += ";$env:APPDATA\npm"
           } else {
             Write-Host "Salesforce CLI already installed."
           }
+          Write-Host "PATH actual: $env:PATH"
           sf --version
+
 
       # ✅ 3. Autenticación con SF_AUTH_URL
       - name: Authenticate Salesforce Org
