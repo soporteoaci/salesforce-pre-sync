@@ -238,36 +238,38 @@ jobs:
         run: |
           # Comprobar si Git está instalado
           if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
-            # Si Git falta, comprobamos si existe Chocolatey
+
+            # Comprobar si Chocolatey está instalado (ruta conocida)
+            $chocoBin = "C:\ProgramData\chocolatey\bin"
             if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
-              Write-Host "Chocolatey not found. Installing Chocolatey..."
-              Set-ExecutionPolicy Bypass -Scope Process -Force
-              [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-              Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-            } else {
-              Write-Host "Chocolatey is already installed."
+              if (Test-Path $chocoBin) {
+                Write-Host "Chocolatey folder exists but command not in PATH. Adding it..."
+                $env:PATH += ";$chocoBin"
+                echo $chocoBin | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+              } else {
+                Write-Host "Chocolatey not found. Installing..."
+                Set-ExecutionPolicy Bypass -Scope Process -Force
+                [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+                Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+                echo $chocoBin | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+              }
             }
 
             Write-Host "Installing Git via Chocolatey..."
             choco install git -y
 
-            # Rutas donde Git suele instalarse
+            # Añadir Git al PATH (en este step y persistente)
             $gitPath1 = "C:\Program Files\Git\bin"
-            $gitPath2 = "C:\ProgramData\chocolatey\bin"
-
-            # Actualizar PATH en este step
+            $gitPath2 = $chocoBin
             $env:PATH += ";$gitPath1;$gitPath2"
-            Write-Host "PATH actualizado: $env:PATH"
-
-            # Persistir PATH para steps siguientes
             echo $gitPath1 | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
             echo $gitPath2 | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           } else {
             Write-Host "Git is already installed."
           }
 
-          # Confirmar instalación
           git --version
+
 
 
 
