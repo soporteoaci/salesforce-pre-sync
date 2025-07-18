@@ -11,9 +11,6 @@ jobs:
 
     steps:
       # ✅ 1. Checkout del repositorio
-      - name: Checkout code
-        uses: actions/checkout@v3
-
       - name: Check or Install Salesforce CLI
         shell: bash
         run: |
