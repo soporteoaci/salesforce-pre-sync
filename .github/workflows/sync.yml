@@ -14,10 +14,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # ✅ 2. Comprobar Salesforce CLI
-      - name: Check Salesforce CLI
+      - name: Check or Install Salesforce CLI
+        shell: bash
         run: |
+          if ! command -v sf &> /dev/null; then
+            echo "Salesforce CLI not found. Installing..."
+            npm install --global @salesforce/cli
+          else
+            echo "Salesforce CLI already installed."
+          fi
           sf --version
+
 
       # ✅ 3. Autenticación con SF_AUTH_URL
       - name: Authenticate Salesforce Org
