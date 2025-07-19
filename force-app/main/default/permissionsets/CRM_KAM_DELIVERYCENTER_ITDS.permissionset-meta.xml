@@ -1133,7 +1133,7 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
+        <editable>true</editable>
         <field>Oportunidad__c.Decision_aprobacion_acuerdo_de_socios__c</field>
         <readable>true</readable>
     </fieldPermissions>

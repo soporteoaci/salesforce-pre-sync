@@ -20,7 +20,7 @@
     <filters>
         <field>Maestro__c</field>
         <operation>equals</operation>
-        <value>Línea de Sevicios</value>
+        <value>Mercado</value>
     </filters>
     <label>Estructura Organizativa</label>
     <sharedTo>
