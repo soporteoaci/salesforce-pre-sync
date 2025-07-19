@@ -10,11 +10,48 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      # ✅ 1. Checkout del repositorio
+      # ✅ 0. Instalar Git ANTES del checkout
+      - name: Ensure Git is installed
+        shell: powershell
+        run: |
+          if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+            Write-Host "Git not found. Checking Chocolatey..."
+            $chocoBin = "C:\ProgramData\chocolatey\bin"
+
+            if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
+              if (Test-Path $chocoBin) {
+                Write-Host "Chocolatey exists but not in PATH. Adding..."
+                $env:PATH += ";$chocoBin"
+                echo $chocoBin | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+              } else {
+                Write-Host "Installing Chocolatey..."
+                Set-ExecutionPolicy Bypass -Scope Process -Force
+                [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+                Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+                echo $chocoBin | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+              }
+            }
+
+            Write-Host "Installing Git via Chocolatey..."
+            choco install git -y
+
+            $gitPath1 = "C:\Program Files\Git\bin"
+            $gitPath2 = $chocoBin
+            $env:PATH += ";$gitPath1;$gitPath2"
+            echo $gitPath1 | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+            echo $gitPath2 | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          } else {
+            Write-Host "Git is already installed."
+          }
+          git --version
+
+      # ✅ 1. Checkout del repositorio (ahora sí funcionará)
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-      # ✅ 2. Comprobar o instalar Salesforce CLI
+      # ✅ 2. Instalar Salesforce CLI si no existe
       - name: Check or Install Salesforce CLI
         shell: powershell
         run: |
@@ -22,13 +59,11 @@ jobs:
             Write-Host "Salesforce CLI not found. Installing..."
             npm install --global @salesforce/cli
           }
-          # Añadir ruta de npm al PATH para steps siguientes
           echo "$env:APPDATA\npm" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          # Actualizar PATH en este step
           $env:PATH += ";$env:APPDATA\npm"
           sf --version
 
-      # ✅ 3. Autenticación con SF_AUTH_URL
+      # ✅ 3. Autenticación con Salesforce
       - name: Authenticate Salesforce Org
         shell: cmd
         run: |
@@ -38,7 +73,7 @@ jobs:
         env:
           SF_AUTH_URL: ${{ secrets.SF_AUTH_URL }}
 
-      # ✅ 4. Crear estructura DX si no existe
+      # ✅ 4. Crear estructura DX
       - name: Ensure Salesforce project structure
         shell: cmd
         run: |
@@ -214,65 +249,26 @@ jobs:
             echo ^</Package^> >> manifest\package.xml
           )
 
-      # ✅ 6. Mostrar contenido del manifest
+      # ✅ 6. Mostrar manifest
       - name: Show manifest
         shell: cmd
         run: |
           echo Current directory:
           cd
-          echo -------------------
           dir /s manifest
 
-      # ✅ 7. Recuperar metadata desde Salesforce
+      # ✅ 7. Recuperar metadata
       - name: Retrieve metadata from Salesforce
         shell: cmd
         run: |
           echo Workspace: %GITHUB_WORKSPACE%
           sf project retrieve start --manifest "%GITHUB_WORKSPACE%\manifest\package.xml" --target-org PRE
 
-      # ✅ 8. Instalar Git si no está disponible
-      - name: Check or Install Git
-        shell: powershell
-        run: |
-          if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
-            Write-Host "Git not found. Checking Chocolatey..."
-            $chocoBin = "C:\ProgramData\chocolatey\bin"
-
-            if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
-              if (Test-Path $chocoBin) {
-                Write-Host "Chocolatey folder exists but not in PATH. Adding it..."
-                $env:PATH += ";$chocoBin"
-                echo $chocoBin | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-              } else {
-                Write-Host "Installing Chocolatey..."
-                Set-ExecutionPolicy Bypass -Scope Process -Force
-                [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-                Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-                echo $chocoBin | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-              }
-            }
-
-            Write-Host "Installing Git via Chocolatey..."
-            choco install git -y
-
-            # Añadir Git al PATH en este step y persistente
-            $gitPath1 = "C:\Program Files\Git\bin"
-            $gitPath2 = $chocoBin
-            $env:PATH += ";$gitPath1;$gitPath2"
-            echo $gitPath1 | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-            echo $gitPath2 | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          } else {
-            Write-Host "Git is already installed."
-          }
-          git --version
-
-      # ✅ 9. Commit y push si hay cambios
+      # ✅ 8. Commit y push
       - name: Commit and push changes
         shell: powershell
         run: |
           cd $env:GITHUB_WORKSPACE
-          Write-Host "Current directory: $env:GITHUB_WORKSPACE"
-
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git config --global user.name "${{ github.actor }}"
 
