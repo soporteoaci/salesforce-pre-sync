@@ -3,7 +3,7 @@
     <fullName>Fecha_firma_contrato__c</fullName>
     <description>Fecha en la que se firma el contrato con el cliente</description>
     <externalId>false</externalId>
-    <inlineHelpText>Fecha en la que se firma el contrato con el cliente</inlineHelpText>
+    <inlineHelpText>Date of signing the contract with the client</inlineHelpText>
     <label>Fecha firma contrato</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

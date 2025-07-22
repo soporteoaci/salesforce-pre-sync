@@ -1,11 +1,11 @@
-trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert) {
+trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert, before update) {
     System.debug('Trigger: Tarea de aprobacion');
     Boolean istest = Test.isRunningTest();
     //Get User email from logged user
     String emailAddress = UserInfo.getUserEmail();
     //Recuperamos el usuario para no ejecutar el trigger
     
-    No_ejecutar_triggers__c usuario_no_trigger = [SELECT Correo_usuario__c FROM No_ejecutar_triggers__c LIMIT 1];
+    //No_ejecutar_triggers__c usuario_no_trigger = [SELECT Correo_usuario__c FROM No_ejecutar_triggers__c LIMIT 1];
 
     List <String> oportunidades = new List <String>();
     List <String> objetivos = new List <String>();
@@ -51,362 +51,364 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert) {
     String DecisionQATecnico_calculada='';
     String DecisionQAEconomico_calculada='';
     //if(emailAddress != usuario_no_trigger.Correo_usuario__c){
-        // AFTER UPDATE
-        if (Trigger.isAfter && Trigger.isUpdate) {
-            //1. Recuperamos las oportunidades en donde haya un cambio en la decisión de la tarea de aprobación
+    
+    
+    // AFTER UPDATE
+    if (Trigger.isAfter && Trigger.isUpdate) {
+        //1. Recuperamos las oportunidades en donde haya un cambio en la decisión de la tarea de aprobación
+        for(Tarea_aprobacion__c tarea : Trigger.New){
+            Decision_old = Trigger.oldMap.get(tarea.id).Decision__c;
+            Decision_new = tarea.Decision__c;
+            
+            if(Decision_old != Decision_new){
+                
+                if(tarea.Oportunidad__c != null && !oportunidades.contains(tarea.Oportunidad__c)){
+                    oportunidades.add(tarea.Oportunidad__c);
+                }
+            }
+        }
+        System.debug('oportunidades String: '+ oportunidades);
+        //2. Si hay oportunidades recuperamos todas las tareas
+        if(oportunidades.size()>0){
+            System.debug('Entra en OPP PROCESS: ');
+            List <Tarea_aprobacion__c> lista_tareas = [SELECT Id, Name, Decision__c, Oportunidad__c,Tipo__c,Socio__c, Subcontrata__c FROM Tarea_aprobacion__c WHERE Oportunidad__c IN: oportunidades];
+            List <Oportunidad__c> ops =[SELECT Id, Decision_Go_Smart_BPM_Offer__c,Decision_aprobacion_acuerdo_de_socios__c,Decision_QA_Economico__c,Decision_QA_Tecnico__c,Decision_Aprobacion_Oferta__c ,Numero_QA__c
+                                        FROM Oportunidad__c WHERE Id IN: oportunidades];
+            
+            //3. Para cada oportunidad clasificamos las tareas
+            for(Oportunidad__c op: ops){
+                
+                tareas_relacionadas_preliminar.clear();
+                tareas_relacionadas_oferta.clear();
+                tareas_relacionadas_socios.clear();
+                tareas_relacionadas_subcontratas.clear();
+                tareas_relacionadas_oferta_tecnica.clear();
+                tareas_relacionadas_oferta_economica.clear();
+                
+                for(Tarea_aprobacion__c tarea : lista_tareas ){
+                    if(tarea.Oportunidad__c == op.Id && tarea.Tipo__c == 'Preliminar'){
+                        tareas_relacionadas_preliminar.add(tarea);
+                    }
+                    
+                    if(tarea.Oportunidad__c == op.Id && tarea.Tipo__c == 'Oferta'){
+                        tareas_relacionadas_oferta.add(tarea);
+                    }
+                    if(tarea.Oportunidad__c == op.Id && tarea.Tipo__c == 'Oferta QA Técnico' || isTest){
+                        tareas_relacionadas_oferta_tecnica.add(tarea);
+                    }
+                    if(tarea.Oportunidad__c == op.Id && tarea.Tipo__c == 'Oferta QA Económico' || isTest){
+                        tareas_relacionadas_oferta_economica.add(tarea);
+                    }
+                    
+                    if(tarea.Oportunidad__c == op.Id && tarea.socio__c != null && tarea.Tipo__c == 'Socios' || isTest){
+                        tareas_relacionadas_socios.add(tarea);
+                    }
+                    
+                    if(tarea.Oportunidad__c == op.Id && tarea.Subcontrata__c != null && tarea.Tipo__c == 'Subcontratas' || isTest){
+                        tareas_relacionadas_subcontratas.add(tarea);
+                    }
+                    
+                    if(tarea.Oportunidad__c == op.Id && tarea.Tipo__c == 'Borrador Acuerdo Socios' || isTest){
+                        tareas_relacionadas_borrador_socios.add(tarea);
+                    }
+                    System.debug('tarea.Tipo__c '+tarea.Tipo__c+' tarea.Decision__c: '+tarea.Decision__c);
+                    if(tarea.Oportunidad__c == op.Id && tarea.Tipo__c == 'Aprobación Preventa' && tarea.Decision__c != 'En proceso' || isTest){
+                        tareas_relacionadas_preventa.add(tarea);
+                    }
+                    
+                    
+                }
+                //4. Si la decisión de la aprobación está pendiente en la Oportunidad se calcula el resumen de la aprobación
+                //Aprobación preliminar
+                if(tareas_relacionadas_preliminar.size()>0 && op.Decision_Go_Smart_BPM_Offer__c != 'Aprobado' /* && op.Decision_Go_Smart_BPM_Offer__c != 'Rechazado'*/  ){
+                    System.debug('Aprobación preliminar');
+                    AprobacionPreliminar(tareas_relacionadas_preliminar,op );
+                    
+                }
+                
+                //Aprobación oferta (ING y de IT aquellas que no pasen el QA)
+                if(tareas_relacionadas_oferta.size()>0 && op.Decision_Aprobacion_Oferta__c != 'Aprobado'/* && op.Decision_Aprobacion_Oferta__c != 'Rechazado' */ || istest){
+                    System.debug('Aprobación Oferta');
+                    AprobacionOferta(tareas_relacionadas_oferta, op);
+                }
+                
+                
+                //Aprobacion QA Técnico
+                if(tareas_relacionadas_oferta_tecnica.size()>0  && op.Decision_QA_Tecnico__c != 'Go'/* && op.Decision_QA_Tecnico__c != 'No go' */ || istest){
+                    System.debug('Aprobación Oferta QA Tecnico');
+                    AprobacionOfertaTecnica(tareas_relacionadas_oferta_tecnica, op);
+                }
+                
+                //Aprobación QA Económico
+                if(tareas_relacionadas_oferta_economica.size()>0 && op.Decision_QA_Economico__c != 'Go'/* && op.Decision_QA_Economico__c != 'No go'*/ || istest){
+                    System.debug('Aprobación Oferta QA Economico');
+                    AprobacionOfertaEconomica(tareas_relacionadas_oferta_economica, op);
+                    
+                }
+                
+                
+                
+                //Aprobacion Socios
+                if(tareas_relacionadas_socios.size()>0 || istest){
+                    System.debug('Aprobación socios');
+                    
+                    AprobacionSocios(tareas_relacionadas_socios,op);
+                }
+                
+                //Aprobacion Subcontratas
+                if(tareas_relacionadas_subcontratas.size()>0|| istest){
+                    System.debug('Aprobación socios');
+                    
+                    AprobacionSubcontrata(tareas_relacionadas_subcontratas,op);
+                }
+                
+                //Borrador acuerdo de socios
+                if(tareas_relacionadas_borrador_socios.size()>0|| istest){
+                    System.debug('Borrador Acuerdo de socios');
+                    AprobacionBorradorAcuerdoSocios(tareas_relacionadas_borrador_socios,op);
+                }
+                //Aprobacion preventa
+                if(tareas_relacionadas_preventa.size()>0|| istest){
+                    System.debug('Aprobación preventa');
+                    AprobacionPreventa(tareas_relacionadas_preventa,op);
+                }
+                
+            }
+        } else {
             for(Tarea_aprobacion__c tarea : Trigger.New){
-                Decision_old = Trigger.oldMap.get(tarea.id).Decision__c;
+                Decision_old = Trigger.oldMap.get(tarea.Id).Decision__c;
                 Decision_new = tarea.Decision__c;
                 
-                if(Decision_old != Decision_new){
-                    
-                    if(tarea.Oportunidad__c != null && !oportunidades.contains(tarea.Oportunidad__c)){
-                        oportunidades.add(tarea.Oportunidad__c);
+                if(tarea.Objetivo__c != null && Decision_old != Decision_new){ 
+                    if(!objetivos.contains(tarea.Objetivo__c)){
+                        objetivos.add(tarea.Objetivo__c);
                     }
-                    
                 }
             }
-            System.debug('oportunidades String: '+ oportunidades);
-            //2. Si hay oportunidades recuperamos todas las tareas
-            if(oportunidades.size()>0){
-                System.debug('Entra en OPP PROCESS: ');
-                List <Tarea_aprobacion__c> lista_tareas = [SELECT Id, Name, Decision__c, Oportunidad__c,Tipo__c,Socio__c, Subcontrata__c FROM Tarea_aprobacion__c WHERE Oportunidad__c IN: oportunidades];
-                List <Oportunidad__c> ops =[SELECT Id, Decision_Go_Smart_BPM_Offer__c,Decision_aprobacion_acuerdo_de_socios__c,Decision_QA_Economico__c,Decision_QA_Tecnico__c,Decision_Aprobacion_Oferta__c ,Numero_QA__c
-                                            FROM Oportunidad__c WHERE Id IN: oportunidades];
+            if (objetivos.size() > 0) {
+                Set<Id> objetivosSet = new Set<Id>();
+                Map<Id, Id> ultimaTareaPorObjetivo = new Map<Id, Id>();
+                Map<Id, String> decisionPorObjetivo = new Map<Id, String>();
                 
-                //3. Para cada oportunidad clasificamos las tareas
-                for(Oportunidad__c op: ops){
-                    
-                    tareas_relacionadas_preliminar.clear();
-                    tareas_relacionadas_oferta.clear();
-                    tareas_relacionadas_socios.clear();
-                    tareas_relacionadas_subcontratas.clear();
-                    tareas_relacionadas_oferta_tecnica.clear();
-                    tareas_relacionadas_oferta_economica.clear();
-                    
-                    for(Tarea_aprobacion__c tarea : lista_tareas ){
-                        if(tarea.Oportunidad__c == op.Id && tarea.Tipo__c == 'Preliminar'){
-                            tareas_relacionadas_preliminar.add(tarea);
-                        }
-                        
-                        if(tarea.Oportunidad__c == op.Id && tarea.Tipo__c == 'Oferta'){
-                            tareas_relacionadas_oferta.add(tarea);
-                        }
-                        if(tarea.Oportunidad__c == op.Id && tarea.Tipo__c == 'Oferta QA Técnico' || isTest){
-                            tareas_relacionadas_oferta_tecnica.add(tarea);
-                        }
-                        if(tarea.Oportunidad__c == op.Id && tarea.Tipo__c == 'Oferta QA Económico' || isTest){
-                            tareas_relacionadas_oferta_economica.add(tarea);
-                        }
-                        
-                        if(tarea.Oportunidad__c == op.Id && tarea.socio__c != null && tarea.Tipo__c == 'Socios' || isTest){
-                            tareas_relacionadas_socios.add(tarea);
-                        }
-                        
-                        if(tarea.Oportunidad__c == op.Id && tarea.Subcontrata__c != null && tarea.Tipo__c == 'Subcontratas' || isTest){
-                            tareas_relacionadas_subcontratas.add(tarea);
-                        }
-                        
-                        if(tarea.Oportunidad__c == op.Id && tarea.Tipo__c == 'Borrador Acuerdo Socios' || isTest){
-                            tareas_relacionadas_borrador_socios.add(tarea);
-                        }
-                        if(tarea.Oportunidad__c == op.Id && tarea.Tipo__c == 'Aprobación Preventa' && tarea.Decision__c == 'En proceso' || isTest){
-                            tareas_relacionadas_preventa.add(tarea);
-                        }
-                        
-                        
-                    }
-                    //4. Si la decisión de la aprobación está pendiente en la Oportunidad se calcula el resumen de la aprobación
-                    //Aprobación preliminar
-                    if(tareas_relacionadas_preliminar.size()>0 && op.Decision_Go_Smart_BPM_Offer__c != 'Aprobado' /* && op.Decision_Go_Smart_BPM_Offer__c != 'Rechazado'*/  ){
-                        System.debug('Aprobación preliminar');
-                        AprobacionPreliminar(tareas_relacionadas_preliminar,op );
-                        
-                    }
-                    
-                    //Aprobación oferta (ING y de IT aquellas que no pasen el QA)
-                    if(tareas_relacionadas_oferta.size()>0 && op.Decision_Aprobacion_Oferta__c != 'Aprobado'/* && op.Decision_Aprobacion_Oferta__c != 'Rechazado' */ || istest){
-                        System.debug('Aprobación Oferta');
-                        AprobacionOferta(tareas_relacionadas_oferta, op);
-                    }
-                    
-                    
-                    //Aprobacion QA Técnico
-                    if(tareas_relacionadas_oferta_tecnica.size()>0  && op.Decision_QA_Tecnico__c != 'Go'/* && op.Decision_QA_Tecnico__c != 'No go' */ || istest){
-                        System.debug('Aprobación Oferta QA Tecnico');
-                        AprobacionOfertaTecnica(tareas_relacionadas_oferta_tecnica, op);
-                    }
-                    
-                    //Aprobación QA Económico
-                    if(tareas_relacionadas_oferta_economica.size()>0 && op.Decision_QA_Economico__c != 'Go'/* && op.Decision_QA_Economico__c != 'No go'*/ || istest){
-                        System.debug('Aprobación Oferta QA Economico');
-                        AprobacionOfertaEconomica(tareas_relacionadas_oferta_economica, op);
-                        
-                    }
-                    
-                    
-                    
-                    //Aprobacion Socios
-                    if(tareas_relacionadas_socios.size()>0 || istest){
-                        System.debug('Aprobación socios');
-                        
-                        AprobacionSocios(tareas_relacionadas_socios,op);
-                    }
-                    
-                    //Aprobacion Subcontratas
-                    if(tareas_relacionadas_subcontratas.size()>0|| istest){
-                        System.debug('Aprobación socios');
-                        
-                        AprobacionSubcontrata(tareas_relacionadas_subcontratas,op);
-                    }
-                    
-                    //Borrador acuerdo de socios
-                    if(tareas_relacionadas_borrador_socios.size()>0|| istest){
-                        System.debug('Borrador Acuerdo de socios');
-                        AprobacionBorradorAcuerdoSocios(tareas_relacionadas_borrador_socios,op);
-                    }
-                    //Aprobacion preventa
-                    if(tareas_relacionadas_preventa.size()>0|| istest){
-                        System.debug('Aprobación preventa');
-                        AprobacionPreventa(tareas_relacionadas_preventa,op);
-                    }
-                    
-                }
-            } else {
-                for(Tarea_aprobacion__c tarea : Trigger.New){
-                    Decision_old = Trigger.oldMap.get(tarea.Id).Decision__c;
-                    Decision_new = tarea.Decision__c;
-                    
-                    if(tarea.Objetivo__c != null && Decision_old != Decision_new){ 
-                        if(!objetivos.contains(tarea.Objetivo__c)){
-                            objetivos.add(tarea.Objetivo__c);
-                        }
+                
+                // Paso 1: Identificar cambios de decisión y guardar la nueva decisión
+                for (Tarea_aprobacion__c tarea : Trigger.New) {
+                    Tarea_aprobacion__c oldTarea = Trigger.oldMap.get(tarea.Id);
+                    if (tarea.Decision__c != oldTarea.Decision__c && tarea.Objetivo__c != null) {
+                        objetivosSet.add(tarea.Objetivo__c);
+                        decisionPorObjetivo.put(tarea.Objetivo__c, tarea.Decision__c);
+                        System.debug('Cambio detectado para Objetivo: ' + tarea.Objetivo__c + ', nueva decisión: ' + tarea.Decision__c);
                     }
                 }
-                if (objetivos.size() > 0) {
-                    Set<Id> objetivosSet = new Set<Id>();
-                    Map<Id, Id> ultimaTareaPorObjetivo = new Map<Id, Id>();
-                    Map<Id, String> decisionPorObjetivo = new Map<Id, String>();
+                
+                System.debug('Objetivos con cambios: ' + objetivosSet);
+                System.debug('Mapa decisiónPorObjetivo: ' + decisionPorObjetivo);
+                
+                if (!objetivosSet.isEmpty()) {
+                    // Paso 2: Consultar todas las tareas relacionadas ordenadas por fecha descendente
+                    List<Tarea_aprobacion__c> todasTareas = [
+                        SELECT Id, Objetivo__c, CreatedDate, Fecha_solicitud__c, Decision__c
+                        FROM Tarea_aprobacion__c
+                        WHERE Objetivo__c IN :objetivosSet
+                        ORDER BY CreatedDate DESC
+                    ];
                     
+                    System.debug('Tareas consultadas para esos objetivos (orden DESC por fecha): ' + todasTareas);
                     
-                    // Paso 1: Identificar cambios de decisión y guardar la nueva decisión
+                    // Paso 3: Guardar la tarea más reciente por cada objetivo
+                    for (Tarea_aprobacion__c tarea : todasTareas) {
+                        if (!ultimaTareaPorObjetivo.containsKey(tarea.Objetivo__c)) {
+                            ultimaTareaPorObjetivo.put(tarea.Objetivo__c, tarea.Id);
+                            System.debug('Tarea más reciente para objetivo ' + tarea.Objetivo__c + ': ' + tarea.Id);
+                        }
+                    }
+                    
+                    // Paso 4: Verificar si la tarea que disparó el trigger es la más reciente
+                    Set<Id> objetivosValidos = new Set<Id>();
                     for (Tarea_aprobacion__c tarea : Trigger.New) {
-                        Tarea_aprobacion__c oldTarea = Trigger.oldMap.get(tarea.Id);
-                        if (tarea.Decision__c != oldTarea.Decision__c && tarea.Objetivo__c != null) {
-                            objetivosSet.add(tarea.Objetivo__c);
-                            decisionPorObjetivo.put(tarea.Objetivo__c, tarea.Decision__c);
-                            System.debug('Cambio detectado para Objetivo: ' + tarea.Objetivo__c + ', nueva decisión: ' + tarea.Decision__c);
+                        Id ultimaTareaId = ultimaTareaPorObjetivo.get(tarea.Objetivo__c);
+                        if (tarea.Objetivo__c != null && tarea.Id == ultimaTareaId) {
+                            objetivosValidos.add(tarea.Objetivo__c);
+                            System.debug('Tarea que disparó el trigger ES la más reciente para objetivo ' + tarea.Objetivo__c);
+                        } else if (tarea.Objetivo__c != null) {
+                            System.debug('Tarea que disparó el trigger NO es la más reciente. tarea.Id=' + tarea.Id + ' vs ultima=' + ultimaTareaId);
                         }
                     }
                     
-                    System.debug('Objetivos con cambios: ' + objetivosSet);
-                    System.debug('Mapa decisiónPorObjetivo: ' + decisionPorObjetivo);
-                    
-                    if (!objetivosSet.isEmpty()) {
-                        // Paso 2: Consultar todas las tareas relacionadas ordenadas por fecha descendente
-                        List<Tarea_aprobacion__c> todasTareas = [
-                            SELECT Id, Objetivo__c, CreatedDate, Fecha_solicitud__c, Decision__c
-                            FROM Tarea_aprobacion__c
-                            WHERE Objetivo__c IN :objetivosSet
-                            ORDER BY CreatedDate DESC
-                        ];
+                    if (!objetivosValidos.isEmpty()) {
+                        System.debug('Objetivos válidos para actualizar otras tareas: ' + objetivosValidos);
                         
-                        System.debug('Tareas consultadas para esos objetivos (orden DESC por fecha): ' + todasTareas);
+                        // Paso 5: Actualizar tareas en proceso (que no sean la más reciente)
+                        List<Tarea_aprobacion__c> tareasParaActualizar = new List<Tarea_aprobacion__c>();
                         
-                        // Paso 3: Guardar la tarea más reciente por cada objetivo
                         for (Tarea_aprobacion__c tarea : todasTareas) {
-                            if (!ultimaTareaPorObjetivo.containsKey(tarea.Objetivo__c)) {
-                                ultimaTareaPorObjetivo.put(tarea.Objetivo__c, tarea.Id);
-                                System.debug('Tarea más reciente para objetivo ' + tarea.Objetivo__c + ': ' + tarea.Id);
-                            }
-                        }
-                        
-                        // Paso 4: Verificar si la tarea que disparó el trigger es la más reciente
-                        Set<Id> objetivosValidos = new Set<Id>();
-                        for (Tarea_aprobacion__c tarea : Trigger.New) {
-                            Id ultimaTareaId = ultimaTareaPorObjetivo.get(tarea.Objetivo__c);
-                            if (tarea.Objetivo__c != null && tarea.Id == ultimaTareaId) {
-                                objetivosValidos.add(tarea.Objetivo__c);
-                                System.debug('Tarea que disparó el trigger ES la más reciente para objetivo ' + tarea.Objetivo__c);
-                            } else if (tarea.Objetivo__c != null) {
-                                System.debug('Tarea que disparó el trigger NO es la más reciente. tarea.Id=' + tarea.Id + ' vs ultima=' + ultimaTareaId);
-                            }
-                        }
-                        
-                        if (!objetivosValidos.isEmpty()) {
-                            System.debug('Objetivos válidos para actualizar otras tareas: ' + objetivosValidos);
+                            Id objetivoId = tarea.Objetivo__c;
                             
-                            // Paso 5: Actualizar tareas en proceso (que no sean la más reciente)
-                            List<Tarea_aprobacion__c> tareasParaActualizar = new List<Tarea_aprobacion__c>();
-                            
-                            for (Tarea_aprobacion__c tarea : todasTareas) {
-                                Id objetivoId = tarea.Objetivo__c;
-                                
-                                if (
-                                    objetivosValidos.contains(objetivoId) &&
-                                    tarea.Decision__c == 'En proceso' &&
-                                    tarea.Id != ultimaTareaPorObjetivo.get(objetivoId)
-                                ) {
-                                    String nuevaDecision = decisionPorObjetivo.get(objetivoId);
-                                    if (nuevaDecision != null) {
-                                        System.debug('Actualizando tarea: ' + tarea.Id + ' (objetivo: ' + objetivoId + ') de "En proceso" a "' + nuevaDecision + '"');
-                                        tarea.Decision__c = nuevaDecision;
-                                        tareasParaActualizar.add(tarea);
-                                    }
+                            if (
+                                objetivosValidos.contains(objetivoId) &&
+                                tarea.Decision__c == 'En proceso' &&
+                                tarea.Id != ultimaTareaPorObjetivo.get(objetivoId)
+                            ) {
+                                String nuevaDecision = decisionPorObjetivo.get(objetivoId);
+                                if (nuevaDecision != null) {
+                                    System.debug('Actualizando tarea: ' + tarea.Id + ' (objetivo: ' + objetivoId + ') de "En proceso" a "' + nuevaDecision + '"');
+                                    tarea.Decision__c = nuevaDecision;
+                                    tareasParaActualizar.add(tarea);
                                 }
                             }
-                            
-                            if (!tareasParaActualizar.isEmpty()) {
-                                System.debug('Tareas a actualizar: ' + tareasParaActualizar);
-                                update tareasParaActualizar;
-                            } else {
-                                System.debug('No se encontraron tareas en proceso distintas a la última para actualizar.');
-                            }
-                        } else {
-                            System.debug('Ninguna tarea que disparó el trigger fue la más reciente. No se realiza ninguna actualización.');
                         }
+                        
+                        if (!tareasParaActualizar.isEmpty()) {
+                            System.debug('Tareas a actualizar: ' + tareasParaActualizar);
+                            update tareasParaActualizar;
+                        } else {
+                            System.debug('No se encontraron tareas en proceso distintas a la última para actualizar.');
+                        }
+                    } else {
+                        System.debug('Ninguna tarea que disparó el trigger fue la más reciente. No se realiza ninguna actualización.');
                     }
-                    
-                    System.debug('--- FIN actualización tareas por cambio de decisión ---');
-                }      
-            }   
-            if(ops_update.size()>0){
-                
-                try{
-                    if(!istest){
-                        update ops_update;
-                    }
-                    
-                }catch(DMLException e){ 
-                    System.debug('Error Tarea aprobacion Oportunidad update: ' + e.getMessage());
-                    
                 }
                 
-                List <Oportunidad__c> new_update = new List <Oportunidad__c> ();
-                for(Oportunidad__c ops: ops_update ){
-                    
-                    ops.Clonada__c=false;
-                    new_update.add(ops);
+                System.debug('--- FIN actualización tareas por cambio de decisión ---');
+            }      
+        }   
+        if(ops_update.size()>0){
+            
+            try{
+                if(!istest){
+                    update ops_update;
                 }
                 
-                try{
-                    if(!isTest){
-                        update new_update; 
-                    }
-                }catch(DMLException e){ 
-                    System.debug('Error Tarea aprobacion Oportunidad update clonada false: ' + e.getMessage());
-                    
-                }
+            }catch(DMLException e){ 
+                System.debug('Error Tarea aprobacion Oportunidad update: ' + e.getMessage());
                 
             }
             
-            if(socio_update.size()>0 || istest){
+            List <Oportunidad__c> new_update = new List <Oportunidad__c> ();
+            for(Oportunidad__c ops: ops_update ){
                 
-                try{
-                    update socio_update;     
-                }catch(DMLException e){ 
-                    System.debug('Error Tarea aprobacion Socios: ' + e.getMessage());
-                    
-                }
+                ops.Clonada__c=false;
+                new_update.add(ops);
             }
             
-            
-            if(subcontrata_update.size()>0 || istest){
+            try{
+                if(!isTest){
+                    update new_update; 
+                }
+            }catch(DMLException e){ 
+                System.debug('Error Tarea aprobacion Oportunidad update clonada false: ' + e.getMessage());
                 
-                try{
-                    update subcontrata_update;     
-                }catch(DMLException e){ 
-                    System.debug('Error Tarea aprobacion subcontrata: ' + e.getMessage());
-                    
-                }
             }
             
-        }
-        if (Trigger.isAfter && Trigger.isInsert) {
-            System.debug('--- INICIO TRIGGER: AFTER INSERT EN Tarea_aprobacion__c ---');
-            
-            Set<Id> oportunidadIds = new Set<Id>();
-            List<Tarea_aprobacion__c> tareaList = Trigger.new;
-            
-            System.debug('Total de tareas procesadas: ' + tareaList.size());
-            
-            for (Tarea_aprobacion__c t : tareaList) {
-                System.debug('Tarea analizada: ' + t.Id + ' | Oportunidad__c: ' + t.Oportunidad__c);
-                if (t.Oportunidad__c != null) {
-                    oportunidadIds.add(t.Oportunidad__c);
-                }
-            }
-            
-            System.debug('Oportunidades encontradas: ' + oportunidadIds);
-            
-            if (oportunidadIds.isEmpty()) {
-                System.debug('No hay oportunidades relacionadas, FIN TRIGGER.');
-                return;
-            }
-            
-            // 1. Obtener oportunidades con OwnerId
-            Map<Id, Oportunidad__c> oportunidadesMap = new Map<Id, Oportunidad__c>(
-                [SELECT Id, OwnerId FROM Oportunidad__c WHERE Id IN :oportunidadIds]
-            );
-            System.debug('Oportunidades recuperadas: ' + oportunidadesMap);
-            
-            // 2. Actualizar tareas con el OwnerId
-            List<Tarea_aprobacion__c> tareasParaActualizar = new List<Tarea_aprobacion__c>();
-            
-            for (Tarea_aprobacion__c t : tareaList) {
-                if (t.Oportunidad__c != null && oportunidadesMap.containsKey(t.Oportunidad__c)) {
-                    Id ownerId = oportunidadesMap.get(t.Oportunidad__c).OwnerId;
-                    tareasParaActualizar.add(new Tarea_aprobacion__c(
-                        Id = t.Id,
-                        Propietario_de_la_Oportunidad__c = ownerId
-                    ));
-                }
-            }
-            
-            System.debug('Tareas a actualizar con OwnerId: ' + tareasParaActualizar.size());
-            
-            if (!tareasParaActualizar.isEmpty()) {
-                update tareasParaActualizar;
-                System.debug('UPDATE ejecutado sobre tareas.');
-            }
-            
-            // 3. Contar tareas QA y actualizar flag en oportunidad
-            Map<Id, Boolean> oportunidadTieneQA = new Map<Id, Boolean>();
-            
-            for (AggregateResult ar : [
-                SELECT Oportunidad__c Id, COUNT(Id) total
-                FROM Tarea_aprobacion__c
-                WHERE Oportunidad__c IN :oportunidadIds
-                AND Tipo__c IN ('Oferta QA Económico', 'Oferta QA Técnico')
-                GROUP BY Oportunidad__c
-            ]) {
-                System.debug('AggregateResult QA: ' + ar);
-                oportunidadTieneQA.put((Id) ar.get('Id'), true);
-            }
-            
-            System.debug('Mapa oportunidadTieneQA: ' + oportunidadTieneQA);
-            
-            List<Oportunidad__c> oportunidadesActualizar = new List<Oportunidad__c>();
-            
-            for (Id oppId : oportunidadIds) {
-                Boolean tieneQA = oportunidadTieneQA.containsKey(oppId);
-                System.debug('Oportunidad ' + oppId + ' tiene QA? ' + tieneQA);
-                oportunidadesActualizar.add(new Oportunidad__c(
-                    Id = oppId,
-                    Tiene_Oferta_QA__c = tieneQA
-                ));
-            }
-            
-            System.debug('Oportunidades a actualizar: ' + oportunidadesActualizar.size());
-            
-            if (!oportunidadesActualizar.isEmpty()) {
-                update oportunidadesActualizar;
-                System.debug('UPDATE ejecutado sobre oportunidades.');
-            }
-            
-            System.debug('--- FIN TRIGGER AFTER INSERT EN Tarea_aprobacion__c ---');
         }
         
+        if(socio_update.size()>0 || istest){
+            
+            try{
+                update socio_update;     
+            }catch(DMLException e){ 
+                System.debug('Error Tarea aprobacion Socios: ' + e.getMessage());
+                
+            }
+        }
+        
+        
+        if(subcontrata_update.size()>0 || istest){
+            
+            try{
+                update subcontrata_update;     
+            }catch(DMLException e){ 
+                System.debug('Error Tarea aprobacion subcontrata: ' + e.getMessage());
+                
+            }
+        }
+        
+    }
+    if (Trigger.isAfter && Trigger.isInsert) {
+        System.debug('--- INICIO TRIGGER: AFTER INSERT EN Tarea_aprobacion__c ---');
+        
+        Set<Id> oportunidadIds = new Set<Id>();
+        List<Tarea_aprobacion__c> tareaList = Trigger.new;
+        
+        System.debug('Total de tareas procesadas: ' + tareaList.size());
+        
+        for (Tarea_aprobacion__c t : tareaList) {
+            System.debug('Tarea analizada: ' + t.Id + ' | Oportunidad__c: ' + t.Oportunidad__c);
+            if (t.Oportunidad__c != null) {
+                oportunidadIds.add(t.Oportunidad__c);
+            }
+        }
+        
+        System.debug('Oportunidades encontradas: ' + oportunidadIds);
+        
+        if (oportunidadIds.isEmpty()) {
+            System.debug('No hay oportunidades relacionadas, FIN TRIGGER.');
+            return;
+        }
+        
+        // 1. Obtener oportunidades con OwnerId
+        Map<Id, Oportunidad__c> oportunidadesMap = new Map<Id, Oportunidad__c>(
+            [SELECT Id, OwnerId FROM Oportunidad__c WHERE Id IN :oportunidadIds]
+        );
+        System.debug('Oportunidades recuperadas: ' + oportunidadesMap);
+        
+        // 2. Actualizar tareas con el OwnerId
+        List<Tarea_aprobacion__c> tareasParaActualizar = new List<Tarea_aprobacion__c>();
+        
+        for (Tarea_aprobacion__c t : tareaList) {
+            if (t.Oportunidad__c != null && oportunidadesMap.containsKey(t.Oportunidad__c)) {
+                Id ownerId = oportunidadesMap.get(t.Oportunidad__c).OwnerId;
+                tareasParaActualizar.add(new Tarea_aprobacion__c(
+                    Id = t.Id,
+                    Propietario_de_la_Oportunidad__c = ownerId
+                ));
+            }
+        }
+        
+        System.debug('Tareas a actualizar con OwnerId: ' + tareasParaActualizar.size());
+        
+        if (!tareasParaActualizar.isEmpty()) {
+            update tareasParaActualizar;
+            System.debug('UPDATE ejecutado sobre tareas.');
+        }
+        
+        // 3. Contar tareas QA y actualizar flag en oportunidad
+        Map<Id, Boolean> oportunidadTieneQA = new Map<Id, Boolean>();
+        
+        for (AggregateResult ar : [
+            SELECT Oportunidad__c Id, COUNT(Id) total
+            FROM Tarea_aprobacion__c
+            WHERE Oportunidad__c IN :oportunidadIds
+            AND Tipo__c IN ('Oferta QA Económico', 'Oferta QA Técnico')
+            GROUP BY Oportunidad__c
+        ]) {
+            System.debug('AggregateResult QA: ' + ar);
+            oportunidadTieneQA.put((Id) ar.get('Id'), true);
+        }
+        
+        System.debug('Mapa oportunidadTieneQA: ' + oportunidadTieneQA);
+        
+        List<Oportunidad__c> oportunidadesActualizar = new List<Oportunidad__c>();
+        
+        for (Id oppId : oportunidadIds) {
+            Boolean tieneQA = oportunidadTieneQA.containsKey(oppId);
+            System.debug('Oportunidad ' + oppId + ' tiene QA? ' + tieneQA);
+            oportunidadesActualizar.add(new Oportunidad__c(
+                Id = oppId,
+                Tiene_Oferta_QA__c = tieneQA
+            ));
+        }
+        
+        System.debug('Oportunidades a actualizar: ' + oportunidadesActualizar.size());
+        
+        if (!oportunidadesActualizar.isEmpty()) {
+            update oportunidadesActualizar;
+            System.debug('UPDATE ejecutado sobre oportunidades.');
+        }
+        
+        System.debug('--- FIN TRIGGER AFTER INSERT EN Tarea_aprobacion__c ---');
+    }
+    
     //}
     
     public String resumenAprobacion(List <Tarea_aprobacion__c> lista_tareas){

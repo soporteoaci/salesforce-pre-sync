@@ -3,7 +3,7 @@
     <fullName>Importe_Contratacion__c</fullName>
     <description>Importe contratación Ayesa</description>
     <externalId>false</externalId>
-    <inlineHelpText>Importe contratación Ayesa</inlineHelpText>
+    <inlineHelpText>Final Amount Contracted for Ayesa Company as per the final contract (It could be different from awarded amount)</inlineHelpText>
     <label>Importe contratación Ayesa</label>
     <precision>18</precision>
     <required>false</required>
