@@ -70,6 +70,10 @@
             <recipient>aat_soporteofertas@gestion.ayesa.com</recipient>
             <type>user</type>
         </recipients>
+        <recipients>
+            <field>Propietario_de_la_Oportunidad__c</field>
+            <type>userLookup</type>
+        </recipients>
         <senderAddress>soporteoaci@ayesa.com</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>Ayesa/Oportunidad_Alerta_Ok_Equipo_Oferta</template>

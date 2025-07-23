@@ -4,6 +4,7 @@
     <active>true</active>
     <errorConditionFormula>AND(
   NOT(ISNEW()),
+		NOT(ISPICKVAL(Tipo_Extension__c, &apos;Extensión Rectificativa&apos;)),
   OR(
     ISPICKVAL(Motivo_de_excepcion__c, &quot;&quot;),
     ISBLANK(TEXT(Motivo_de_excepcion__c))
