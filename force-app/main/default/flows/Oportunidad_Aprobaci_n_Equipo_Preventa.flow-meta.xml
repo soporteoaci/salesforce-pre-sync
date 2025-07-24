@@ -56,7 +56,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Crear_tarea_de_aprobaci_n</targetReference>
+            <targetReference>Equipo_preventa_informado</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -72,7 +72,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Crear_tarea_de_aprobaci_n</targetReference>
+            <targetReference>Equipo_preventa_informado</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -134,6 +134,38 @@
                 <targetReference>Obtener_extensiones</targetReference>
             </connector>
             <label>Informado y distinto de soporte oaci</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Equipo_preventa_informado</name>
+        <label>Equipo preventa informado?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Crear_tarea_de_aprobaci_n</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Resultado predeterminado</defaultConnectorLabel>
+        <rules>
+            <name>S</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Oportunidad_de_orquestador.Decisi_n_Equipo_Preventa__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Oportunidad_de_orquestador.Decisi_n_Equipo_Preventa__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Limpiar_decisi_n_equipo_preventa</targetReference>
+            </connector>
+            <label>Sí</label>
         </rules>
     </decisions>
     <decisions>
@@ -360,6 +392,30 @@
             </value>
         </inputAssignments>
         <object>Tarea_aprobacion__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Limpiar_decisi_n_equipo_preventa</name>
+        <label>Limpiar decisión equipo preventa</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Crear_tarea_de_aprobaci_n</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Oportunidad_de_orquestador.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Decisi_n_Equipo_Preventa__c</field>
+            <value>
+                <stringValue></stringValue>
+            </value>
+        </inputAssignments>
+        <object>Oportunidad__c</object>
     </recordUpdates>
     <start>
         <locationX>0</locationX>

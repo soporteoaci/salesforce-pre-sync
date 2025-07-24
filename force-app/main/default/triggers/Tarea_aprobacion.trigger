@@ -6,7 +6,7 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert, bef
     //Recuperamos el usuario para no ejecutar el trigger
     
     //No_ejecutar_triggers__c usuario_no_trigger = [SELECT Correo_usuario__c FROM No_ejecutar_triggers__c LIMIT 1];
-
+    
     List <String> oportunidades = new List <String>();
     List <String> objetivos = new List <String>();
     
@@ -72,7 +72,7 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert, bef
         if(oportunidades.size()>0){
             System.debug('Entra en OPP PROCESS: ');
             List <Tarea_aprobacion__c> lista_tareas = [SELECT Id, Name, Decision__c, Oportunidad__c,Tipo__c,Socio__c, Subcontrata__c FROM Tarea_aprobacion__c WHERE Oportunidad__c IN: oportunidades];
-            List <Oportunidad__c> ops =[SELECT Id, Decision_Go_Smart_BPM_Offer__c,Decision_aprobacion_acuerdo_de_socios__c,Decision_QA_Economico__c,Decision_QA_Tecnico__c,Decision_Aprobacion_Oferta__c ,Numero_QA__c
+            List <Oportunidad__c> ops =[SELECT Id, Decisi_n_Equipo_Preventa__c,Decision_Go_Smart_BPM_Offer__c,Decision_aprobacion_acuerdo_de_socios__c,Decision_QA_Economico__c,Decision_QA_Tecnico__c,Decision_Aprobacion_Oferta__c ,Numero_QA__c
                                         FROM Oportunidad__c WHERE Id IN: oportunidades];
             
             //3. Para cada oportunidad clasificamos las tareas
@@ -111,12 +111,11 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert, bef
                     if(tarea.Oportunidad__c == op.Id && tarea.Tipo__c == 'Borrador Acuerdo Socios' || isTest){
                         tareas_relacionadas_borrador_socios.add(tarea);
                     }
-                    System.debug('tarea.Tipo__c '+tarea.Tipo__c+' tarea.Decision__c: '+tarea.Decision__c);
-                    if(tarea.Oportunidad__c == op.Id && tarea.Tipo__c == 'Aprobación Preventa' && tarea.Decision__c != 'En proceso' || isTest){
+
+                    if(tarea.Oportunidad__c == op.Id && tarea.Tipo__c == 'Aprobación Preventa'|| isTest){
                         tareas_relacionadas_preventa.add(tarea);
                     }
-                    
-                    
+                       
                 }
                 //4. Si la decisión de la aprobación está pendiente en la Oportunidad se calcula el resumen de la aprobación
                 //Aprobación preliminar
@@ -145,8 +144,11 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert, bef
                     AprobacionOfertaEconomica(tareas_relacionadas_oferta_economica, op);
                     
                 }
-                
-                
+                //Aprobacion preventa
+                if(tareas_relacionadas_preventa.size()>0 && (op.Decisi_n_Equipo_Preventa__c != 'Go' && op.Decisi_n_Equipo_Preventa__c != 'No Go') || istest){
+                    System.debug('Aprobación preventa');
+                    AprobacionPreventa(tareas_relacionadas_preventa,op);
+                }
                 
                 //Aprobacion Socios
                 if(tareas_relacionadas_socios.size()>0 || istest){
@@ -166,13 +168,7 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert, bef
                 if(tareas_relacionadas_borrador_socios.size()>0|| istest){
                     System.debug('Borrador Acuerdo de socios');
                     AprobacionBorradorAcuerdoSocios(tareas_relacionadas_borrador_socios,op);
-                }
-                //Aprobacion preventa
-                if(tareas_relacionadas_preventa.size()>0|| istest){
-                    System.debug('Aprobación preventa');
-                    AprobacionPreventa(tareas_relacionadas_preventa,op);
-                }
-                
+                }    
             }
         } else {
             for(Tarea_aprobacion__c tarea : Trigger.New){
@@ -663,17 +659,22 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert, bef
     }  
     
     public void AprobacionPreventa(List <Tarea_aprobacion__c> tareas_relacionadas_preventa, Oportunidad__c op){
-        System.debug('Aprobación preliminar');
-        Decision_preventa =  resumenAprobacion(tareas_relacionadas_preventa); 
-        if(Decision_preventa=='Aprobado'){
-            op.Bloqueo_por_aprobacion__c =false;
-        }else if (Decision_preventa=='Rechazado'){
-            op.Bloqueo_por_aprobacion__c =false;
-        }
-        if(!ops_update_id.contains(op.Id)){
-            ops_update_id.add(op.Id);
-            ops_update.add(op);
-        }      
-        
+        System.debug('Aprobacion Preventa');
+        Decision_preventa =  resumenAprobacion(tareas_relacionadas_preventa);
+        System.debug('Decision Preventa: ' + Decision_preventa);
+        if(Decision_preventa != ''){
+            if(Decision_preventa=='Aprobado'){
+                op.Bloqueo_por_aprobacion__c =false;
+                op.Decisi_n_Equipo_Preventa__c = 'Go';
+            }else if (Decision_preventa=='Rechazado'){
+                op.Bloqueo_por_aprobacion__c =false;
+                op.Decisi_n_Equipo_Preventa__c = 'No Go';
+            }
+            
+            if(!ops_update_id.contains(op.Id)|| istest){
+                ops_update_id.add(op.Id);
+                ops_update.add(op);
+            }
+        } 
     } 
 }

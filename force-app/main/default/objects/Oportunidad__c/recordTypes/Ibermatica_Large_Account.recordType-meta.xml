@@ -711,6 +711,17 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Decisi_n_Equipo_Preventa__c</picklist>
+        <values>
+            <fullName>Go</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Go</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Decision_Aprobacion_Oferta__c</picklist>
         <values>
             <fullName>Aprobado</fullName>

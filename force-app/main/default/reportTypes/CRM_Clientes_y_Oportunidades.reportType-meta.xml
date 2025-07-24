@@ -2278,6 +2278,11 @@
             <field>Importe_total_ofertado_Breakdown_ajust__c</field>
             <table>Account.Oportunidades__r</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Decisi_n_Equipo_Preventa__c</field>
+            <table>Account.Oportunidades__r</table>
+        </columns>
         <masterLabel>Oportunidades</masterLabel>
     </sections>
     <sections>

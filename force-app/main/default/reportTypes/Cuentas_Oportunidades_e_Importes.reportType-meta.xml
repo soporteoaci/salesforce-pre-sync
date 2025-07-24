@@ -2167,6 +2167,11 @@
             <field>Service_Model__c</field>
             <table>Account.Oportunidades__r</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Decisi_n_Equipo_Preventa__c</field>
+            <table>Account.Oportunidades__r</table>
+        </columns>
         <masterLabel>Oportunidades</masterLabel>
     </sections>
     <sections>

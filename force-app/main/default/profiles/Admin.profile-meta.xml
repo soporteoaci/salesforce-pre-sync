@@ -4975,6 +4975,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Oportunidad__c.Decisi_n_Equipo_Preventa__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Oportunidad__c.Decision_Aprobacion_Oferta__c</field>
         <readable>true</readable>
     </fieldPermissions>
