@@ -71,7 +71,7 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert, bef
         //2. Si hay oportunidades recuperamos todas las tareas
         if(oportunidades.size()>0){
             System.debug('Entra en OPP PROCESS: ');
-            List <Tarea_aprobacion__c> lista_tareas = [SELECT Id, Name, Decision__c, Oportunidad__c,Tipo__c,Socio__c, Subcontrata__c FROM Tarea_aprobacion__c WHERE Oportunidad__c IN: oportunidades];
+            List <Tarea_aprobacion__c> lista_tareas = [SELECT Id,CreatedDate, Name, Decision__c, Oportunidad__c,Tipo__c,Socio__c, Subcontrata__c FROM Tarea_aprobacion__c WHERE Oportunidad__c IN: oportunidades];
             List <Oportunidad__c> ops =[SELECT Id, Decisi_n_Equipo_Preventa__c,Decision_Go_Smart_BPM_Offer__c,Decision_aprobacion_acuerdo_de_socios__c,Decision_QA_Economico__c,Decision_QA_Tecnico__c,Decision_Aprobacion_Oferta__c ,Numero_QA__c
                                         FROM Oportunidad__c WHERE Id IN: oportunidades];
             
@@ -659,7 +659,13 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert, bef
     }  
     
     public void AprobacionPreventa(List <Tarea_aprobacion__c> tareas_relacionadas_preventa, Oportunidad__c op){
-        System.debug('Aprobacion Preventa');
+        // ✅ Si hay varias tareas, dejamos solo la última (más reciente)
+        if (!tareas_relacionadas_preventa.isEmpty() && tareas_relacionadas_preventa.size() > 1) {
+            tareas_relacionadas_preventa.sort(new CreatedDateComparator());
+            tareas_relacionadas_preventa = new List<Tarea_aprobacion__c>{
+                tareas_relacionadas_preventa.get(tareas_relacionadas_preventa.size() - 1)
+                    };
+                        }
         Decision_preventa =  resumenAprobacion(tareas_relacionadas_preventa);
         System.debug('Decision Preventa: ' + Decision_preventa);
         if(Decision_preventa != ''){
@@ -677,4 +683,15 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert, bef
             }
         } 
     } 
+    public class CreatedDateComparator implements Comparator<Tarea_aprobacion__c> {
+        public Integer compare(Tarea_aprobacion__c a, Tarea_aprobacion__c b) {
+            Datetime d1 = a.CreatedDate;
+            Datetime d2 = b.CreatedDate;
+
+            if (d1 == d2) {
+                return 0;
+            }
+            return d1 > d2 ? 1 : -1;
+        }
+    }
 }
