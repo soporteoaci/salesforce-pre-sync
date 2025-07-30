@@ -4,9 +4,13 @@
     <description>&apos;Importe total ofertado (sin IVA) Euros&apos; ajustado según el campo &apos;Diversification breakdown&apos;. Se va a utilizar en los informes de Sofia</description>
     <externalId>false</externalId>
     <formula>IF(
-  ISPICKVAL(Bookings_breakdown__c, &quot;Up-selling&quot;),
-  Importe_total_sin_IVA__c * Up_selling__c,
-  Importe_total_sin_IVA__c
+  ISPICKVAL(	Bookings_breakdown__c, &quot;No&quot;) || ISBLANK(TEXT(	Bookings_breakdown__c)),
+  NULL,
+  IF(
+    ISPICKVAL(Bookings_breakdown__c, &quot;Up-selling&quot;),
+    Importe_total_sin_IVA__c * Up_selling__c,
+    Importe_total_sin_IVA__c
+  )
 )</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Importe total ofertado (Breakdown ajust)</label>
