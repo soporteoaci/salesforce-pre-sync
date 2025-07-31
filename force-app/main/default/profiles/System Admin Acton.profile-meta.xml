@@ -6364,6 +6364,11 @@
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>Oportunidad__c.Tipo_para_Informe__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Oportunidad__c.Tipologia__c</field>
         <readable>true</readable>

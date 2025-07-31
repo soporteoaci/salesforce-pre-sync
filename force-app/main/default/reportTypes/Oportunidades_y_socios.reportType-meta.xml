@@ -446,6 +446,11 @@
             <field>Decisi_n_Equipo_Preventa__c</field>
             <table>Oportunidad__c</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Tipo_para_Informe__c</field>
+            <table>Oportunidad__c</table>
+        </columns>
         <masterLabel>Oportunidades</masterLabel>
     </sections>
     <sections>

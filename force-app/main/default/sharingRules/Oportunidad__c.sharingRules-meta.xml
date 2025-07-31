@@ -740,7 +740,7 @@
         <criteriaItems>
             <field>Sociedad_Ayesa__c</field>
             <operation>equals</operation>
-            <value>0151 - BYRNELOOBY UK</value>
+            <value>0151 - BYRNELOOBY Middle East,0151 - BYRNELOOBY UK,0151 - BYRNELOOBY Irlanda</value>
         </criteriaItems>
         <criteriaItems>
             <field>Pais__c</field>
