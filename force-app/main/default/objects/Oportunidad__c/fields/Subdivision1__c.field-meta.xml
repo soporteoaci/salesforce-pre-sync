@@ -265,6 +265,11 @@
                 <label>Servicios Sociales</label>
             </value>
             <value>
+                <fullName>Technology</fullName>
+                <default>false</default>
+                <label>Technology</label>
+            </value>
+            <value>
                 <fullName>Telco</fullName>
                 <default>false</default>
                 <label>Telco</label>
@@ -614,6 +619,10 @@
         <valueSettings>
             <controllingFieldValue>60033576</controllingFieldValue>
             <valueName>Media</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>60033576</controllingFieldValue>
+            <valueName>Technology</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>60033576</controllingFieldValue>

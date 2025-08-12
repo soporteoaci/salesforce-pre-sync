@@ -1553,7 +1553,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Account.Sector_de_Mercado_IT__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -4518,7 +4518,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.AP_C_SME__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -4568,7 +4568,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Area_Tecnologia__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -4593,22 +4593,22 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Authorised_Officer__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Auxiliar_Delivery_Center__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Auxiliar_Preventa__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.BU_Manager__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -4628,7 +4628,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Bookings_breakdown__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -4678,7 +4678,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.CPV_varios__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -4838,7 +4838,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Codigo_OC_Relacionada__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -4863,7 +4863,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Comentario_QA__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -4873,7 +4873,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Competencia_esperada__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -4943,7 +4943,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Cross_Selling_Picklist__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -4968,7 +4968,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Decisi_n_Equipo_Preventa__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -5138,7 +5138,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Elemento_PEP__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -5148,7 +5148,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Email_Preventa__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -5168,7 +5168,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Equipo_Oferta__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -5278,12 +5278,12 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Fecha_QA_T_cnico__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Fecha_Qa_Econ_mico__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -5393,7 +5393,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Gestion_CV__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -5488,7 +5488,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Importe_final__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -5503,7 +5503,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Importe_total_ofertado_Breakdown_ajust__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -5533,7 +5533,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Informar_PRL__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -5543,7 +5543,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Innovation_Work_Stream__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -5578,7 +5578,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Lead_Id__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -5703,7 +5703,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Motivo_de_excepcion__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -5823,7 +5823,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Oportunidad_Id_18__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -5878,17 +5878,17 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Pais_IT_Literal__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Pais_IT__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Pais_Origen__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -5933,7 +5933,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Pipeline__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -5968,7 +5968,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Posible_impacto_por_tipo_de_campo__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -6018,7 +6018,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Proveedor_Incumbente__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -6148,17 +6148,17 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Responsable_de_Proyecto_Email__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Responsable_de_Proyecto_Nombre__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Responsable_de_Proyecto__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -6278,7 +6278,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Tiene_Oferta_QA__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -6343,7 +6343,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Tipo_de_contrato__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -6353,7 +6353,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Tipo_de_servicio__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -6388,7 +6388,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Up_selling__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>

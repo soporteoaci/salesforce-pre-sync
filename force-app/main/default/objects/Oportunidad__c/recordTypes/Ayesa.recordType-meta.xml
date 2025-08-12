@@ -4669,6 +4669,10 @@
             <default>false</default>
         </values>
         <values>
+            <fullName>Technology</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>Telco</fullName>
             <default>false</default>
         </values>
@@ -5283,6 +5287,10 @@
         </values>
         <values>
             <fullName>Retail</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Technology</fullName>
             <default>false</default>
         </values>
         <values>
