@@ -4,7 +4,7 @@
     <decisions>
         <name>Aviso_Internacional_Isidoro</name>
         <label>Aviso Internacional Isidoro</label>
-        <locationX>2393</locationX>
+        <locationX>2096</locationX>
         <locationY>1163</locationY>
         <defaultConnector>
             <targetReference>Importe_2</targetReference>
@@ -47,7 +47,7 @@
 Si no cumple aprueba DM</description>
         <name>Condiciones_aprobacion</name>
         <label>Condiciones aprobacion</label>
-        <locationX>1502</locationX>
+        <locationX>1766</locationX>
         <locationY>611</locationY>
         <defaultConnector>
             <targetReference>Copia_2_de_Aprobaci_n_Preliminar</targetReference>
@@ -100,7 +100,7 @@ Si no cumple aprueba DM</description>
 Si no cumple aprueba DM</description>
         <name>Copia_1_de_Condiciones_aprobacion</name>
         <label>Condiciones aprobacion</label>
-        <locationX>2030</locationX>
+        <locationX>2294</locationX>
         <locationY>611</locationY>
         <defaultConnector>
             <targetReference>Copia_2_de_Aprobaci_n_Preliminar_Internacional</targetReference>
@@ -153,7 +153,7 @@ Si no cumple aprueba DM</description>
     <decisions>
         <name>Copia_1_de_Pa_s</name>
         <label>País</label>
-        <locationX>4142</locationX>
+        <locationX>4406</locationX>
         <locationY>611</locationY>
         <defaultConnector>
             <targetReference>Copia_1_de_Aprobacion_Preliminar_Internacional_ING</targetReference>
@@ -178,7 +178,7 @@ Si no cumple aprueba DM</description>
     <decisions>
         <name>Copia_2_de_Pa_s</name>
         <label>País</label>
-        <locationX>974</locationX>
+        <locationX>1238</locationX>
         <locationY>503</locationY>
         <defaultConnector>
             <targetReference>Copia_1_de_Aprobaci_n_Preliminar_Internacional</targetReference>
@@ -210,12 +210,27 @@ Si no cumple aprueba DM</description>
     <decisions>
         <name>Direcci_n_de_Operaciones</name>
         <label>Dirección de Operaciones</label>
-        <locationX>2393</locationX>
+        <locationX>2096</locationX>
         <locationY>287</locationY>
         <defaultConnector>
             <targetReference>Sociedad</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>ING</defaultConnectorLabel>
+        <rules>
+            <name>Fundaci_n_Iberm_tica</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Sociedad_Ayesa__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>0186</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Copia_2_de_Enviar_aprobacion</targetReference>
+            </connector>
+            <label>Fundación Ibermática</label>
+        </rules>
         <rules>
             <name>IT_DS</name>
             <conditionLogic>or</conditionLogic>
@@ -250,7 +265,7 @@ Si no cumple aprueba DM</description>
     <decisions>
         <name>Envio_de_aprobacion</name>
         <label>Envio de aprobacion</label>
-        <locationX>908</locationX>
+        <locationX>1172</locationX>
         <locationY>395</locationY>
         <defaultConnector>
             <targetReference>Pa_s</targetReference>
@@ -348,7 +363,7 @@ Si no cumple aprueba DM</description>
     <decisions>
         <name>Importe</name>
         <label>Importe</label>
-        <locationX>4406</locationX>
+        <locationX>4670</locationX>
         <locationY>503</locationY>
         <defaultConnector>
             <targetReference>Pais</targetReference>
@@ -373,7 +388,7 @@ Si no cumple aprueba DM</description>
     <decisions>
         <name>Importe_1</name>
         <label>Importe</label>
-        <locationX>3350</locationX>
+        <locationX>3614</locationX>
         <locationY>503</locationY>
         <defaultConnector>
             <targetReference>Copia_1_de_Enviar_aprobaci_n_BL</targetReference>
@@ -442,7 +457,7 @@ Si no cumple aprueba DM</description>
     <decisions>
         <name>Importe_2</name>
         <label>Importe</label>
-        <locationX>2591</locationX>
+        <locationX>2294</locationX>
         <locationY>1271</locationY>
         <defaultConnectorLabel>Resultado predeterminado</defaultConnectorLabel>
         <rules>
@@ -464,7 +479,7 @@ Si no cumple aprueba DM</description>
     <decisions>
         <name>Importe_3</name>
         <label>Importe</label>
-        <locationX>2558</locationX>
+        <locationX>2822</locationX>
         <locationY>395</locationY>
         <defaultConnector>
             <targetReference>Copia_1_de_Enviar_aprobacion</targetReference>
@@ -489,7 +504,7 @@ Si no cumple aprueba DM</description>
     <decisions>
         <name>Pa_s</name>
         <label>País</label>
-        <locationX>1766</locationX>
+        <locationX>2030</locationX>
         <locationY>503</locationY>
         <defaultConnector>
             <targetReference>Copia_1_de_Condiciones_aprobacion</targetReference>
@@ -521,7 +536,7 @@ Si no cumple aprueba DM</description>
     <decisions>
         <name>Pais</name>
         <label>País</label>
-        <locationX>4670</locationX>
+        <locationX>4934</locationX>
         <locationY>611</locationY>
         <defaultConnector>
             <targetReference>Aprobacion_Preliminar_Internacional_ING</targetReference>
@@ -546,7 +561,7 @@ Si no cumple aprueba DM</description>
     <decisions>
         <name>Sociedad</name>
         <label>Sociedad</label>
-        <locationX>3878</locationX>
+        <locationX>4142</locationX>
         <locationY>395</locationY>
         <defaultConnector>
             <targetReference>Importe</targetReference>
@@ -568,13 +583,14 @@ Si no cumple aprueba DM</description>
             <label>0151-BL</label>
         </rules>
     </decisions>
+    <description>Se añade paso de aprobación si la Sociedad es 0186 Fundación Ibermática</description>
     <environments>Default</environments>
     <interviewLabel>Oportunidad: Aprobación Preliminar {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Oportunidad: Aprobación Preliminar</label>
     <orchestratedStages>
         <name>Aprobaci_n_Preliminar</name>
         <label>Aprobación Preliminar</label>
-        <locationX>1370</locationX>
+        <locationX>1634</locationX>
         <locationY>719</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -771,7 +787,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Aprobacion_Preliminar_ING</name>
         <label>Aprobacion Preliminar ING</label>
-        <locationX>4538</locationX>
+        <locationX>4802</locationX>
         <locationY>719</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -968,7 +984,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Aprobacion_Preliminar_Internacional</name>
         <label>Aprobación Preliminar Internacional</label>
-        <locationX>1898</locationX>
+        <locationX>2162</locationX>
         <locationY>719</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -1165,7 +1181,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Aprobacion_Preliminar_Internacional_ING</name>
         <label>Aprobacion Preliminar Internacional ING</label>
-        <locationX>4802</locationX>
+        <locationX>5066</locationX>
         <locationY>719</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -1362,7 +1378,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Avanzar_etapa</name>
         <label>Avanzar etapa</label>
-        <locationX>50</locationX>
+        <locationX>314</locationX>
         <locationY>503</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -1401,7 +1417,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Avanzar_etapa_C_I</name>
         <label>Avanzar etapa C&amp;I</label>
-        <locationX>578</locationX>
+        <locationX>842</locationX>
         <locationY>503</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -1440,7 +1456,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Avanzar_etapa_Cyber_Multi</name>
         <label>Avanzar etapa Cyber Multi</label>
-        <locationX>314</locationX>
+        <locationX>578</locationX>
         <locationY>503</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -1479,7 +1495,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Copia_1_de_Aprobaci_n_Preliminar</name>
         <label>Aprobación Preliminar</label>
-        <locationX>842</locationX>
+        <locationX>1106</locationX>
         <locationY>611</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -1676,7 +1692,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Copia_1_de_Aprobaci_n_Preliminar_Internacional</name>
         <label>Aprobación Preliminar Internacional</label>
-        <locationX>1106</locationX>
+        <locationX>1370</locationX>
         <locationY>611</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -1914,7 +1930,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Copia_1_de_Aprobacion_Preliminar_ING</name>
         <label>Copia 1 de Aprobacion Preliminar ING</label>
-        <locationX>4010</locationX>
+        <locationX>4274</locationX>
         <locationY>719</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -2070,7 +2086,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Copia_1_de_Aprobacion_Preliminar_Internacional_ING</name>
         <label>Copia 1 de Aprobacion Preliminar Internacional ING</label>
-        <locationX>4274</locationX>
+        <locationX>4538</locationX>
         <locationY>719</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -2226,7 +2242,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Copia_1_de_Enviar_aprobaci_n_BL</name>
         <label>Copia 1 de Enviar aprobación BL</label>
-        <locationX>3746</locationX>
+        <locationX>4010</locationX>
         <locationY>611</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -2423,7 +2439,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Copia_1_de_Enviar_aprobacion</name>
         <label>Enviar aprobacion</label>
-        <locationX>2690</locationX>
+        <locationX>2954</locationX>
         <locationY>503</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -2579,7 +2595,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Copia_2_de_Aprobaci_n_Preliminar</name>
         <label>Copia 2 de Aprobación Preliminar</label>
-        <locationX>1634</locationX>
+        <locationX>1898</locationX>
         <locationY>719</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -2682,7 +2698,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Copia_2_de_Aprobaci_n_Preliminar_Internacional</name>
         <label>Copia 2 de Aprobación Preliminar Internacional</label>
-        <locationX>2162</locationX>
+        <locationX>2426</locationX>
         <locationY>719</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -2824,9 +2840,83 @@ Si no cumple aprueba DM</description>
         </stageSteps>
     </orchestratedStages>
     <orchestratedStages>
+        <name>Copia_2_de_Enviar_aprobacion</name>
+        <label>Copia 2 de Enviar aprobacion</label>
+        <locationX>50</locationX>
+        <locationY>395</locationY>
+        <connector>
+            <targetReference>Aviso_Internacional_Isidoro</targetReference>
+        </connector>
+        <exitConditionLogic>and</exitConditionLogic>
+        <stageSteps>
+            <name>Enviar_aprobacion_Responsable_Fundaci_n</name>
+            <actionName>Oportunidad_Aprobaci_n_Preliminar_Responsables</actionName>
+            <actionType>stepBackground</actionType>
+            <assignees>
+                <assignee>
+                    <stringValue>javier.ponce@gestion.ayesa.com.pre</stringValue>
+                </assignee>
+                <assigneeType>User</assigneeType>
+            </assignees>
+            <entryConditionLogic>and</entryConditionLogic>
+            <exitConditionLogic>and</exitConditionLogic>
+            <inputParameters>
+                <name>Id_oportunidad</name>
+                <value>
+                    <elementReference>$Record.Id</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>Id_responsable</name>
+                <value>
+                    <elementReference>$Record.Responsable_Fundaci_n_Iberm_tica__c</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>Oportunidad</name>
+                <value>
+                    <elementReference>$Record</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>vResponsable</name>
+                <value>
+                    <stringValue>Responsable Fundación</stringValue>
+                </value>
+            </inputParameters>
+            <label>Enviar aprobacion Responsable Fundación</label>
+            <requiresAsyncProcessing>false</requiresAsyncProcessing>
+            <runAsUser>true</runAsUser>
+            <stepSubtype>BackgroundStep</stepSubtype>
+        </stageSteps>
+        <stageSteps>
+            <name>Copia_1_de_Bloqueo_OC</name>
+            <actionName>Oportunidad_Bloqueo_por_aprobacion</actionName>
+            <actionType>stepBackground</actionType>
+            <assignees>
+                <assignee>
+                    <stringValue>javier.ponce@gestion.ayesa.com.pre</stringValue>
+                </assignee>
+                <assigneeType>User</assigneeType>
+            </assignees>
+            <entryConditionLogic>and</entryConditionLogic>
+            <exitConditionLogic>and</exitConditionLogic>
+            <inputParameters>
+                <name>vOportunidadId</name>
+                <value>
+                    <elementReference>$Record</elementReference>
+                </value>
+            </inputParameters>
+            <label>Copia 1 de Bloqueo OC</label>
+            <requiresAsyncProcessing>false</requiresAsyncProcessing>
+            <runAsUser>true</runAsUser>
+            <stepSubtype>BackgroundStep</stepSubtype>
+        </stageSteps>
+    </orchestratedStages>
+    <orchestratedStages>
         <name>Enviar_alerta</name>
         <label>Enviar alerta</label>
-        <locationX>2459</locationX>
+        <locationX>2162</locationX>
         <locationY>1379</locationY>
         <exitConditionLogic>and</exitConditionLogic>
         <stageSteps>
@@ -2862,7 +2952,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Enviar_aprobacion_BL</name>
         <label>Enviar aprobación BL</label>
-        <locationX>2954</locationX>
+        <locationX>3218</locationX>
         <locationY>611</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -2936,7 +3026,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Enviar_aprobacion_BL_2</name>
         <label>Enviar aprobación BL</label>
-        <locationX>3218</locationX>
+        <locationX>3482</locationX>
         <locationY>611</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -3051,7 +3141,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Enviar_aprobacion_BL_3</name>
         <label>Enviar aprobación BL</label>
-        <locationX>3482</locationX>
+        <locationX>3746</locationX>
         <locationY>611</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -3248,7 +3338,7 @@ Si no cumple aprueba DM</description>
     <orchestratedStages>
         <name>Enviar_aprobacion_DM</name>
         <label>Enviar aprobacion</label>
-        <locationX>2426</locationX>
+        <locationX>2690</locationX>
         <locationY>503</locationY>
         <connector>
             <targetReference>Aviso_Internacional_Isidoro</targetReference>
@@ -3380,7 +3470,7 @@ Si no cumple aprueba DM</description>
     </processMetadataValues>
     <processType>Orchestrator</processType>
     <start>
-        <locationX>2267</locationX>
+        <locationX>1970</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Direcci_n_de_Operaciones</targetReference>

@@ -36,6 +36,17 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Apoyo_de_Soporte_a_Ofertas__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sí</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Area_IB__c</picklist>
         <values>
             <fullName>CIBER</fullName>
@@ -1201,6 +1212,17 @@
         </values>
         <values>
             <fullName>Trimestral</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Go_Presentaci_n_Oferta__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sí</fullName>
             <default>false</default>
         </values>
     </picklistValues>

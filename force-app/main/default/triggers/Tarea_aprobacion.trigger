@@ -72,7 +72,7 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert, bef
         if(oportunidades.size()>0){
             System.debug('Entra en OPP PROCESS: ');
             List <Tarea_aprobacion__c> lista_tareas = [SELECT Id,CreatedDate, Name, Decision__c, Oportunidad__c,Tipo__c,Socio__c, Subcontrata__c FROM Tarea_aprobacion__c WHERE Oportunidad__c IN: oportunidades];
-            List <Oportunidad__c> ops =[SELECT Id, Decisi_n_Equipo_Preventa__c,Decision_Go_Smart_BPM_Offer__c,Decision_aprobacion_acuerdo_de_socios__c,Decision_QA_Economico__c,Decision_QA_Tecnico__c,Decision_Aprobacion_Oferta__c ,Numero_QA__c
+            List <Oportunidad__c> ops =[SELECT Id, Direccion_Operaciones__c, Decisi_n_Equipo_Preventa__c,Decision_Go_Smart_BPM_Offer__c,Decision_aprobacion_acuerdo_de_socios__c,Decision_QA_Economico__c,Decision_QA_Tecnico__c,Decision_Aprobacion_Oferta__c ,Numero_QA__c, Fecha_limite_de_presentacion__c, Go_Presentaci_n_Oferta__c
                                         FROM Oportunidad__c WHERE Id IN: oportunidades];
             
             //3. Para cada oportunidad clasificamos las tareas
@@ -463,7 +463,8 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert, bef
         }
         
     }
-    
+
+	
     public void AprobacionOferta (List <Tarea_aprobacion__c> tareas_relacionadas_oferta, Oportunidad__c op){
         System.debug('Aprobación oferta');
         
@@ -474,10 +475,15 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert, bef
                 
                 op.Decision_Aprobacion_Oferta__c='Aprobado';
                 op.Bloqueo_por_aprobacion__c =false;
-                
+
             }else if(Decision_oferta=='Rechazado'){
                 op.Decision_Aprobacion_Oferta__c='No aprobado';
                 op.Bloqueo_por_aprobacion__c =false;
+            }
+            
+            System.debug('SCM - Decision Aprobacion Oferta = ' + op.Decision_Aprobacion_Oferta__c);
+            if ((op.Direccion_Operaciones__c == 'INNOVATION' || op.Numero_QA__c == 0) && op.Decision_Aprobacion_Oferta__c == 'Aprobado' ) {
+                evaluarGoPosterior(op); // SCM - 08/2025
             }
             
             if(!ops_update_id.contains(op.Id) || isTest){
@@ -507,6 +513,11 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert, bef
             if(op.Numero_QA__c ==2 && op.Decision_QA_Economico__c!= 'Go'&& op.Decision_QA_Economico__c!= 'No go' || istest){
                 System.debug('Bloqueo a true porque aun falta economico');
                 op.Bloqueo_por_aprobacion__c =true;
+            }
+            
+            System.debug('SCM - Decisiones Aprobacion OfertaTecnica = ' + op.Decision_QA_Economico__c + '/' + op.Decision_QA_Tecnico__c);
+            if ( ( op.Decision_QA_Tecnico__c == 'Go' && op.Numero_QA__c == 3 || op.Decision_QA_Tecnico__c == 'Go' && op.Decision_QA_Economico__c == 'Go' && op.Numero_QA__c == 2 ) && op.Direccion_Operaciones__c == 'IT&DS') {
+                evaluarGoPosterior(op); // SCM - 08/2025
             }
             
             if(!ops_update_id.contains(op.Id)){
@@ -542,6 +553,11 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert, bef
             }
             
             System.debug('Despues Decision economica: '+ op.Decision_QA_Economico__c);
+            
+            System.debug('SCM - Decisiones Aprobacion OfertaEconomica = ' + op.Decision_QA_Economico__c + '/' + op.Decision_QA_Tecnico__c);
+            if ( ( op.Decision_QA_Economico__c == 'Go' && op.Numero_QA__c == 1 || op.Decision_QA_Tecnico__c == 'Go' && op.Decision_QA_Economico__c == 'Go' && op.Numero_QA__c == 2 ) && op.Direccion_Operaciones__c == 'IT&DS') {
+                evaluarGoPosterior(op); // SCM - 08/2025
+            }
             
             if(!ops_update_id.contains(op.Id)|| istest){
                 ops_update_id.add(op.Id);
@@ -692,6 +708,20 @@ trigger Tarea_aprobacion on Tarea_aprobacion__c (after update, after insert, bef
                 return 0;
             }
             return d1 > d2 ? 1 : -1;
+        }
+    }
+    
+
+    //SCM  - Si Aprobacion Oferta se da despues de la fecha presentacion --> Go_Presentaci_n_Oferta__c = true  
+    public void evaluarGoPosterior(Oportunidad__c op) {
+        DateTime fechaAprobacion = System.now(); 
+        if (op.Fecha_limite_de_presentacion__c != null && op.Go_Presentaci_n_Oferta__c == null) {
+            if (fechaAprobacion.date() > op.Fecha_limite_de_presentacion__c) {
+                op.Go_Presentaci_n_Oferta__c = 'Sí';
+            } else {
+                op.Go_Presentaci_n_Oferta__c = 'No';
+            }
+            System.debug('¿Go posterior a presentación oferta? = ' + op.Go_Presentaci_n_Oferta__c);
         }
     }
 }

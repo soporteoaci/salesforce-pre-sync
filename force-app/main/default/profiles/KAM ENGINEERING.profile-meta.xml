@@ -4546,6 +4546,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>Oportunidad__c.Apoyo_de_Soporte_a_Ofertas__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Oportunidad__c.Aprobacion_Borrador_Acuerdo_de_Socios__c</field>
         <readable>true</readable>
@@ -4919,6 +4924,11 @@
         <editable>true</editable>
         <field>Oportunidad__c.Contratado_a_o_oportunidad__c</field>
         <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Oportunidad__c.Correo_Oferta_enviado__c</field>
+        <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -5306,6 +5316,11 @@
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>Oportunidad__c.Fecha_de_solicitud_de_soporte__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Oportunidad__c.Fecha_estimada_de_cierre__c</field>
         <readable>true</readable>
@@ -5393,6 +5408,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Gestion_CV__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Oportunidad__c.Go_Presentaci_n_Oferta__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -6128,6 +6148,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Oportunidad__c.Responsable_Administrativo_de_la_Oferta__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Oportunidad__c.Responsable_Fundaci_n_Iberm_tica__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -6903,6 +6928,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Parametrica__c.Responsable_Area_Pais_IT__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Parametrica__c.Responsable_Fundaci_n_Iberm_tica__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

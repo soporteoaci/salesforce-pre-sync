@@ -8,9 +8,7 @@ public class ExtensionOppControllerTest {
         ExtensionOppController.getTypeOpp(idOportunidad2.id);
         ExtensionOppController.extenderOportunidad_fields(idOportunidad2.id, 'Test',null,null,null,null,null,null,null,'Extensión Rectificativa',null,null);
         ExtensionOppController.getTypeOpp(idOportunidad2.id);
-        
-        ExtensionOppController.test();
-        
+ 
     }
     
 }
