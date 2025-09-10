@@ -22,6 +22,7 @@
     <apiVersion>64.0</apiVersion>
     <environments>Default</environments>
     <interviewLabel>Oferta SAP Ingenieria {!$Flow.CurrentDateTime}</interviewLabel>
+    <isAdditionalPermissionRequiredToRun>true</isAdditionalPermissionRequiredToRun>
     <label>Código Oferta SAP Ingeniería</label>
     <processMetadataValues>
         <name>BuilderType</name>
@@ -70,7 +71,7 @@
             <targetReference>Envio_Correo_Soporte_Ofertas</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
         <name>idOportunidad</name>
         <dataType>SObject</dataType>

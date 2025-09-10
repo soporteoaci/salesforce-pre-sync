@@ -730,7 +730,7 @@
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
         <name>cuentaArchivosGO</name>
         <dataType>Number</dataType>

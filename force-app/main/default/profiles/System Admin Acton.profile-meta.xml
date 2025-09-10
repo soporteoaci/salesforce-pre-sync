@@ -4556,7 +4556,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Apoyo_de_Soporte_a_Ofertas__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -4961,7 +4961,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Cross_Selling_Picklist__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -5326,7 +5326,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Fecha_de_solicitud_de_soporte__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -5421,7 +5421,7 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Oportunidad__c.Go_Presentaci_n_Oferta__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
