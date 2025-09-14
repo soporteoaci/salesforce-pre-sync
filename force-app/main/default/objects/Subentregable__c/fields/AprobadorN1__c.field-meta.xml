@@ -3,7 +3,7 @@
     <fullName>AprobadorN1__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <externalId>false</externalId>
-    <inlineHelpText>Normalmente el cliente. Una vez aprobado pasa al Aprobador Final</inlineHelpText>
+    <inlineHelpText>Normally the client: Once approved, it goes to the final approver</inlineHelpText>
     <label>Aprobador Nivel 1</label>
     <referenceTo>User</referenceTo>
     <relationshipName>EntregablesSupervisados</relationshipName>

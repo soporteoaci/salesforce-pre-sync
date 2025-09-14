@@ -4,7 +4,7 @@
     <defaultValue>false</defaultValue>
     <description>Oportunidad contemplada en presupuesto AYESA</description>
     <externalId>false</externalId>
-    <inlineHelpText>Oportunidad contemplada en presupuesto AYESA</inlineHelpText>
+    <inlineHelpText>Opport. included in AYESA&apos;s budget</inlineHelpText>
     <label>Oport. contemplada en presupuesto Ayesa</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

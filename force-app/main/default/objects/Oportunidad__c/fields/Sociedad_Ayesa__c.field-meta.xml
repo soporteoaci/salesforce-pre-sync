@@ -3,7 +3,7 @@
     <fullName>Sociedad_Ayesa__c</fullName>
     <description>Sociedad del grupo Ayesa que presenta la oferta</description>
     <externalId>false</externalId>
-    <inlineHelpText>Sociedad del grupo Ayesa que presenta la oferta</inlineHelpText>
+    <inlineHelpText>Company from the Ayesa Group that submits the bid</inlineHelpText>
     <label>Sociedad</label>
     <required>true</required>
     <trackFeedHistory>false</trackFeedHistory>

@@ -3,7 +3,7 @@
     <fullName>Fecha_limite_de_presentacion__c</fullName>
     <description>Fecha de presentación de la oferta</description>
     <externalId>false</externalId>
-    <inlineHelpText>Fecha límite de presentación de la oferta, fecha REAL en caso de haberla presentado</inlineHelpText>
+    <inlineHelpText>Bid submittal limit date, ACTUAL date if it has already been submitted</inlineHelpText>
     <label>Fecha presentación</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
