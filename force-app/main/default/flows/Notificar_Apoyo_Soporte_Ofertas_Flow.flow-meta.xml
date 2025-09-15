@@ -199,7 +199,7 @@
         </rules>
         <rules>
             <name>Go_Posterior_a_Presentacion_Oferta_es_true</name>
-            <conditionLogic>and</conditionLogic>
+            <conditionLogic>1 AND 2 AND (3 OR 4)</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Go_Presentaci_n_Oferta__c</leftValueReference>
                 <operator>EqualTo</operator>
@@ -216,6 +216,13 @@
             </conditions>
             <conditions>
                 <leftValueReference>$Record.Subfase__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Etapa__c</leftValueReference>
                 <operator>IsChanged</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -730,7 +737,7 @@
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
     <variables>
         <name>cuentaArchivosGO</name>
         <dataType>Number</dataType>

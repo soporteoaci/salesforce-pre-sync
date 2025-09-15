@@ -71,7 +71,7 @@
             <targetReference>Envio_Correo_Soporte_Ofertas</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
     <variables>
         <name>idOportunidad</name>
         <dataType>SObject</dataType>

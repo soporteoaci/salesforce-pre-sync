@@ -175,6 +175,13 @@ public class CloneOppController {
             
         }
         
+        // SCM - CODIGO OFERTA SAP
+        oppClonada.Go_Presentaci_n_Oferta__c = null; 
+        oppClonada.Fecha_de_solicitud_de_soporte__c = null;
+        oppClonada.Apoyo_de_Soporte_a_Ofertas__c = null;
+        oppClonada.Correo_Oferta_enviado__c = false;
+        
+        
         oppClonada.Actualizar_Estado__c=false; 
         oppClonada.Clonada__c = true;
         oppClonada.Bloqueada__c =false;
