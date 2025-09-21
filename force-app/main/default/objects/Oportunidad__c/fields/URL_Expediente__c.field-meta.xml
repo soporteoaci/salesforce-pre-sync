@@ -3,7 +3,7 @@
     <fullName>URL_Expediente__c</fullName>
     <description>Url al expediente en MS Power Automate</description>
     <externalId>false</externalId>
-    <inlineHelpText>Url to the file in MS Power Automate</inlineHelpText>
+    <inlineHelpText>Url al expediente en MS Power Automate</inlineHelpText>
     <label>URL Expediente</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

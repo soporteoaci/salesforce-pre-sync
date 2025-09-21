@@ -3,7 +3,7 @@
     <fullName>Evidencia_Estado_Entregable__c</fullName>
     <description>Indica el estado del Entregable al que corresponde el documento</description>
     <externalId>false</externalId>
-    <inlineHelpText>Indicates the status of the deliverable to which the evidence corresponds</inlineHelpText>
+    <inlineHelpText>Indica el estado del Entregable al que corresponde la evidencia</inlineHelpText>
     <label>Evidencia Estado Entregable</label>
     <required>false</required>
     <trackTrending>false</trackTrending>

@@ -4,8 +4,10 @@
     <active>true</active>
     <description>Fecha_Presentacion_Cierre</description>
     <errorConditionFormula>AND( 
+				$Profile.Name &lt;&gt; &apos;System Administrator&apos;,
 				$Profile.Name &lt;&gt; &apos;Administrador del sistema&apos;,
 				Record_Type_Name__c =&apos;Ayesa&apos;,
+				NOT(ISPICKVAL(Subfase__c, &apos;Aplazada / anulada&apos;)),
 				Fecha_limite_de_presentacion__c  &gt;  Fecha_estimada_de_cierre__c
 			)</errorConditionFormula>
     <errorDisplayField>Fecha_estimada_de_cierre__c</errorDisplayField>
