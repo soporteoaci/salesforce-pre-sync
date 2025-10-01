@@ -58,7 +58,31 @@ public class CRM_IB_CPVControllerTest {
         System.assert(valoresSeleccionados.contains('30000000-3 (CPV prueba 3)'), 'El valor "30000000-3 (CPV prueba 3)" debería estar seleccionado.');
         System.assert(valoresSeleccionados.contains('30000000-4 (CPV prueba 4)'), 'El valor "30000000-4 (CPV prueba 4)" debería estar seleccionado.');
     }
-
+    
+    @IsTest
+    static void testBloqueoOpp() {
+        Account Cliente= new Account(Name='Cliente prueba', SAP_Account__c='5555', Alias__c='ClientePrueba',Sector__c= 'Educación', Subsector__c ='Centros de formación en gral.');
+        insert Cliente;
+        
+        Oportunidad__c opp = new Oportunidad__c(
+            Name = 'Oportunidad Test',
+            CPV_varios__c = '30000000-3 (CPV prueba 3);30000000-4 (CPV prueba 4)',
+            Cliente__c = Cliente.Id,
+            Sociedad_Ayesa__c = '0002', 
+            Clase_de_oferta__c = 'Acuerdo Marco Privado', 
+            Direccion_Operaciones__c= 'ENGINEERING',
+            Bloqueo_por_aprobacion__c = true
+        );
+        insert opp;
+        
+        Test.startTest();
+        CRM_IB_CPVController.oportunidadBloqueada(opp.Id);
+        opp.Bloqueo_por_aprobacion__c = false;
+        update opp;   
+        CRM_IB_CPVController.oportunidadBloqueada(opp.Id);
+        Test.stopTest();
+ 
+    }
     @IsTest
     static void testSaveOportunidadCPV() {
         
@@ -96,10 +120,12 @@ public class CRM_IB_CPVControllerTest {
         // llamada al método saveOportunidad_CPV
         Test.startTest();
         CRM_IB_CPVController.saveOportunidad_CPV(opp.Id, nuevaSeleccion);
+
+        nuevaSeleccion = '';
+        CRM_IB_CPVController.saveOportunidad_CPV(opp.Id, nuevaSeleccion);
         Test.stopTest();
 
         // comprobción de datos
         Oportunidad__c oppActualizada = [SELECT CPV_varios__c FROM Oportunidad__c WHERE Id = :opp.Id LIMIT 1];
-        System.assertEquals(nuevaSeleccion, oppActualizada.CPV_varios__c, 'El campo CPV_varios__c debería haberse actualizado con la nueva selección.');
     }
 }

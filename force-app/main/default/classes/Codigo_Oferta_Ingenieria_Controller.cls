@@ -13,9 +13,9 @@ public class Codigo_Oferta_Ingenieria_Controller {
             // destinatarios
             List<String> destinatarios = new List<String>();
             if (opp.Pais__c == 'IN') {
-                destinatarios.add('scabeza@ayesa.com'); // CAMBIAR EN PRO A: sharad.gupta@ayesa.com
+                destinatarios.add('ebravo@ayesa.com'); // CAMBIAR EN PRO A: sharad.gupta@ayesa.com
             } else if (opp.Pais__c == 'MX') {
-                destinatarios.add('scabeza@ayesa.com'); // CAMBIAR EN PRO A: cagutierrez@ayesa.com
+                destinatarios.add('ebravo@ayesa.com'); // CAMBIAR EN PRO A: cagutierrez@ayesa.com
             } else {
                 destinatarios.add('soporteoaci@ayesa.com'); // CAMBIAR EN PRO A: ofertas@ayesa.com
             }

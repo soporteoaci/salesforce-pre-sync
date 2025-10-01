@@ -3,7 +3,7 @@
     <fullName>Canal_de_anuncio__c</fullName>
     <description>Canal por el que es publicada la oferta</description>
     <externalId>false</externalId>
-    <inlineHelpText>Canal por el que es publicada la oferta/licitación</inlineHelpText>
+    <inlineHelpText>Channel where the offer/bid is published</inlineHelpText>
     <label>Canal de anuncio</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

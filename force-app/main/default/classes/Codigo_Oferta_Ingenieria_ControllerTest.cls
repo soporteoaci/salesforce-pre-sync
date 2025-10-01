@@ -10,7 +10,7 @@ public class Codigo_Oferta_Ingenieria_ControllerTest {
  
     @isTest 
     static void test_enviarCorreoOferta() { 
-		
+        
         // Test data setup
         TestDataFactory.initParametricas();
         Oportunidad__c oports = TestDataFactory.createOportunidad('Cualificación', 'AAT - TORRE PELLI');

@@ -3,7 +3,7 @@
     <fullName>ETC__c</fullName>
     <description>A ser confirmado por el Director de Mercado/División</description>
     <externalId>false</externalId>
-    <inlineHelpText>A ser confirmado por el Director de Mercado/División</inlineHelpText>
+    <inlineHelpText>To be confirmed by Market/Division Director</inlineHelpText>
     <label>ETC</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
